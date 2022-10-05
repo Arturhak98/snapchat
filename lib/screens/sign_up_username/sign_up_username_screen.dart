@@ -10,7 +10,8 @@ import '../signup_password/sign_up_password_screen.dart';
 import 'bloc/sign_up_username_bloc.dart';
 
 class SignUpUserName extends StatefulWidget {
-  const SignUpUserName({/* required this.users, */ required this.user, super.key});
+  const SignUpUserName(
+      {/* required this.users, */ required this.user, super.key});
   final User user;
 /*   final List<User> users; */
 
@@ -19,7 +20,7 @@ class SignUpUserName extends StatefulWidget {
 }
 
 class _SignUpUserNameState extends State<SignUpUserName> {
-  bool _isValid = false;
+  bool _isValid = false, _usernameIsBusy = true;
   late final SignUpUsernameBloc _bloc = SignUpUsernameBloc();
 
   @override
@@ -29,22 +30,27 @@ class _SignUpUserNameState extends State<SignUpUserName> {
       child: BlocConsumer<SignUpUsernameBloc, SignUpUsernameState>(
         listener: (context, state) {
           if (state is UpdateUserState) {
+            _usernameIsBusy = true;
             widget.user.userName = state.username;
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => SignUpPassword(
                   user: widget.user,
-                 /*  users: widget.users, */
+                  /*  users: widget.users, */
                 ),
               ),
             );
           }
           if (state is UpdateUsernameValid) {
+            _usernameIsBusy=true;
             _isValid = state.isUsernameValid;
+          }
+          if (state is UsernameIsBusy) {
+            _usernameIsBusy = false;
           }
         },
         builder: (context, state) => ScreenSample(
-          buttonText:  AppLocalizations.of(context)!.nextbutton,
+            buttonText: AppLocalizations.of(context)!.nextbutton,
             isvalid: _isValid,
             onPressNextButton: _onPressNextButton,
             children: [
@@ -53,6 +59,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
               _renderFieldTitle(),
               _renderUsernameField(),
               _renderErrorText(),
+            /*   _renderUsernameBusyErrorText(), */
             ]),
       ),
     );
@@ -70,10 +77,10 @@ class _SignUpUserNameState extends State<SignUpUserName> {
   }
 
   Widget _renderSecondTitle() {
-    return  Center(
+    return Center(
       child: Text(
         AppLocalizations.of(context)!.usarnamesecondtitle,
-        style:const TextStyle(
+        style: const TextStyle(
           color: Colors.grey,
           fontWeight: FontWeight.bold,
           fontSize: 15,
@@ -101,12 +108,21 @@ class _SignUpUserNameState extends State<SignUpUserName> {
 
   Widget _renderErrorText() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 100),
+      padding: const EdgeInsets.only(bottom:  100),
       child: ErorrText(
-          isValid: _isValid,
-          errorText: AppLocalizations.of(context)!.usernamefielderror),
+          isValid: _isValid && _usernameIsBusy,
+          errorText:_usernameIsBusy?AppLocalizations.of(context)!.usernamefielderror:AppLocalizations.of(context)!.usernamebusytext),
     );
   }
+
+ /*  Widget _renderUsernameBusyErrorText() {
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 100),
+        child: ErorrText(
+          isValid: _usernameIsBusy,
+          errorText: AppLocalizations.of(context)!.usernamebusytext,
+        ));
+  } */
 
   void _onPressNextButton() {
     _bloc.add(NextButtonEvent());

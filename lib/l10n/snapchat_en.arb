@@ -44,6 +44,7 @@
     "usarnamesecondtitle":"Your username is how friends add you\n                      on Snapchat",
     "usernamefieldtitle":"USERNAME",
     "usernamefielderror":"USERNAME length must be greater than 4",
+    "usernamebusytext":"Usernmae is busy",
 
     "passtitle":"Set a password",
     "passsecondtitle":"Your password should be least 8 \n                    characters",

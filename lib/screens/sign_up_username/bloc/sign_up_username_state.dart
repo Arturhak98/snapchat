@@ -13,3 +13,4 @@ class UpdateUserState extends SignUpUsernameState {
   final String username;
   UpdateUserState({required this.username});
 }
+class UsernameIsBusy extends SignUpUsernameState{}
