@@ -13,11 +13,12 @@ class UpdatePassValid extends LoginState {
   UpdatePassValid({required this.IsPassValid});
 }
 class UserNameAndPassValidState extends LoginState{
-  final bool entryallow;
+  /* final bool entryallow; */
   final User loginUser;
-UserNameAndPassValidState({required this.entryallow,required this.loginUser});
+UserNameAndPassValidState({/* required this.entryallow, */required this.loginUser});
 }
 class PassObscureState extends LoginState{
   final passIsObscured;
   PassObscureState({required this.passIsObscured}); 
 }
+class UserNameOrPassIsNotValid extends LoginState{}

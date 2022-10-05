@@ -2,15 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/middle_wares/database.dart';
 
-
-
-
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   late String _pass, _username;
- /*  List<User> _users = []; */
+  /*  List<User> _users = []; */
   LoginBloc() : super(LoginInitial()) {
     on<NameFieldEvent>(_onNameFieldEvent);
     on<PassFieldEvent>(_onPassFieldEvent);
@@ -18,19 +15,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginScrenLoadEvent>(_onLoginScrenLoadEvent);
     on<ObscureButtonEvent>(_onObscureButtonEvent);
   }
-void _onObscureButtonEvent(ObscureButtonEvent event ,Emitter emit){
-  emit(PassObscureState(passIsObscured: !event.passIsObscured));
-}
+  void _onObscureButtonEvent(ObscureButtonEvent event, Emitter emit) {
+    emit(PassObscureState(passIsObscured: !event.passIsObscured));
+  }
 
   void _onLoginScrenLoadEvent(LoginScrenLoadEvent event, Emitter emit) {
     /* _users = event.users; */
   }
 
-  Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit)async {
-  //  var loginUser; 
-   bool usernameAndPassIsValid;
-   // var loginUser= DataBase.getUser(_username);
-  /*   _users.forEach((User user) {
+  Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit) async {
+    //  var loginUser;
+    //bool usernameAndPassIsValid;
+    // var loginUser= DataBase.getUser(_username);
+    /*   _users.forEach((User user) {
       if (user.userName == _username && user.password == _pass) {
         loginUser = user;
       }
@@ -41,15 +38,21 @@ void _onObscureButtonEvent(ObscureButtonEvent event ,Emitter emit){
       usernameAndPassIsValid = false;
       loginUser=User();
     }  */
+    var query;
     var user;
-   await DataBase.getUser(_username).then((value) =>user=value);
-    if(user.password==_pass){
-        usernameAndPassIsValid = true;
+    await DataBase.getUser(_username).then((value) => query = value);
+    if (query.isNotEmpty) {
+      user = User.fromMap(query.first);
+      if (user.password == _pass) {
+     /*    usernameAndPassIsValid = true; */
+        emit(UserNameAndPassValidState(
+          /*   entryallow: usernameAndPassIsValid,  */loginUser: user));
+      } else {
+        emit(UserNameOrPassIsNotValid());
+      }
+    } else {
+      emit(UserNameOrPassIsNotValid());
     }
-    else{
-      usernameAndPassIsValid = false;
-    }
-    emit(UserNameAndPassValidState(entryallow: usernameAndPassIsValid, loginUser: user));
   }
 
   void _onPassFieldEvent(PassFieldEvent event, Emitter emit) {

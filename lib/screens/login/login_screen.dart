@@ -44,8 +44,11 @@ class _LogInState extends State<LogInScreen> {
           if(state is PassObscureState){
             _visibility=state.passIsObscured;
           }
+          if(state is UserNameOrPassIsNotValid){
+            _usernameAndPassIsValid=false;
+          }
           if (state is UserNameAndPassValidState) {
-            _usernameAndPassIsValid = state.entryallow;
+            _usernameAndPassIsValid = true;
             if (_usernameAndPassIsValid) {
               Navigator.of(context).push(
                 MaterialPageRoute(
