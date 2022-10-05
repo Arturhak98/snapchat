@@ -1,0 +1,14 @@
+//
+//  Generated file. Do not edit.
+//
+
+import FlutterMacOS
+import Foundation
+
+import devicelocale
+import sqflite
+
+func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+  DevicelocalePlugin.register(with: registry.registrar(forPlugin: "DevicelocalePlugin"))
+  SqflitePlugin.register(with: registry.registrar(forPlugin: "SqflitePlugin"))
+}
