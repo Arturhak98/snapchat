@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
-import 'package:snapchat/components/models/user.dart';
+
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
@@ -10,8 +10,8 @@ import '../user/user_screen.dart';
 import 'bloc/login_bloc.dart';
 
 class LogInScreen extends StatefulWidget {
-  const LogInScreen({required this.users, super.key});
-  final List<User> users;
+  const LogInScreen({ super.key});
+ // final List<User> users;
   @override
   State<LogInScreen> createState() => _LogInState();
 }
@@ -25,7 +25,7 @@ class _LogInState extends State<LogInScreen> {
 
   @override
   void initState() {
-    _bloc.add(LoginScrenLoadEvent(users: widget.users));
+    _bloc.add(LoginScrenLoadEvent(/* users: widget.users */));
     super.initState();
   }
 

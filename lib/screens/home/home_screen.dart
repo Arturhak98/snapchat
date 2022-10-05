@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
-import 'package:snapchat/components/models/user.dart';
+/* import 'package:snapchat/components/models/user.dart'; */
+import 'package:snapchat/middle_wares/database.dart';
 import 'package:snapchat/screens/signup_name/sign_up_name_screen.dart';
-
 import '../login/login_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-  final List<User> Users = [];
+class HomeScreen extends StatefulWidget {
+ const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+ // final List<User> Users = [];
+@override
+  void initState() {
+    DataBase.init();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +34,12 @@ class HomeScreen extends StatelessWidget {
                   const Color.fromRGBO(239, 62, 90, 1),
                   AppLocalizations.of(context)!.login,
                   context,
-                  LogInScreen(users: Users)),
+                const  LogInScreen()),
               _renderButtonWidget(
                   const Color.fromRGBO(36, 175, 252, 1),
                   AppLocalizations.of(context)!.signup,
                   context,
-                  SignUpName(Users: Users)),
+                const  SignUpName()),
             ],
           ),
         ),

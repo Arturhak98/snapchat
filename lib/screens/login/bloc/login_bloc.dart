@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:snapchat/components/models/user.dart';
+import 'package:snapchat/middle_wares/database.dart';
 
 
 
@@ -9,7 +10,7 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   late String _pass, _username;
-  List<User> _users = [];
+ /*  List<User> _users = []; */
   LoginBloc() : super(LoginInitial()) {
     on<NameFieldEvent>(_onNameFieldEvent);
     on<PassFieldEvent>(_onPassFieldEvent);
@@ -22,24 +23,33 @@ void _onObscureButtonEvent(ObscureButtonEvent event ,Emitter emit){
 }
 
   void _onLoginScrenLoadEvent(LoginScrenLoadEvent event, Emitter emit) {
-    _users = event.users;
+    /* _users = event.users; */
   }
 
-  void _onNextButtonEvent(NextButtonEvent event, Emitter emit) {
-    var loginUser; 
-    bool usernameAndPassIsValid;
-    _users.forEach((User user) {
+  Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit)async {
+  //  var loginUser; 
+   bool usernameAndPassIsValid;
+   // var loginUser= DataBase.getUser(_username);
+  /*   _users.forEach((User user) {
       if (user.userName == _username && user.password == _pass) {
         loginUser = user;
       }
-    });
-     if (loginUser != null) {
+    }); */
+/*      if (loginUser.isNotEmpty) {
       usernameAndPassIsValid = true;
     } else {
       usernameAndPassIsValid = false;
       loginUser=User();
-    } 
-    emit(UserNameAndPassValidState(entryallow: usernameAndPassIsValid,loginUser: loginUser));
+    }  */
+    var user;
+   await DataBase.getUser(_username).then((value) =>user=value);
+    if(user.password==_pass){
+        usernameAndPassIsValid = true;
+    }
+    else{
+      usernameAndPassIsValid = false;
+    }
+    emit(UserNameAndPassValidState(entryallow: usernameAndPassIsValid, loginUser: user));
   }
 
   void _onPassFieldEvent(PassFieldEvent event, Emitter emit) {

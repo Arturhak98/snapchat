@@ -5,13 +5,14 @@ import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
+import 'package:snapchat/middle_wares/database.dart';
 
 import 'bloc/sign_up_pass_word_bloc.dart';
 
 class SignUpPassword extends StatefulWidget {
-  const SignUpPassword({required this.users, required this.user, super.key});
+  const SignUpPassword({/* required this.users, */ required this.user, super.key});
   final User user;
-  final List<User> users;
+ /*  final List<User> users; */
   @override
   State<SignUpPassword> createState() => _SignUpPasswordState();
 }
@@ -33,7 +34,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
           }
           if (state is UpdateUserState) {
             widget.user.password = state.password;
-            widget.users.add(widget.user);
+            DataBase.insert(widget.user);
+          /*   widget.users.add(widget.user); */
             Navigator.popUntil(context, (route) => !Navigator.canPop(context));
           }
           if (state is HidePassState) {

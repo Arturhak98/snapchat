@@ -10,9 +10,9 @@ import '../signup_password/sign_up_password_screen.dart';
 import 'bloc/sign_up_username_bloc.dart';
 
 class SignUpUserName extends StatefulWidget {
-  const SignUpUserName({required this.users, required this.user, super.key});
+  const SignUpUserName({/* required this.users, */ required this.user, super.key});
   final User user;
-  final List<User> users;
+/*   final List<User> users; */
 
   @override
   State<SignUpUserName> createState() => _SignUpUserNameState();
@@ -34,7 +34,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
               MaterialPageRoute(
                 builder: (context) => SignUpPassword(
                   user: widget.user,
-                  users: widget.users,
+                 /*  users: widget.users, */
                 ),
               ),
             );

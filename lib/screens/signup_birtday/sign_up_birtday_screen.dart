@@ -14,8 +14,8 @@ import '../signup_phone_or_email/sign_up_phone_or_email.dart';
 import 'bloc/sign_up_birtday_bloc.dart';
 
 class SignUpBirtDay extends StatefulWidget {
-  const SignUpBirtDay({required this.user, required this.users, super.key});
-  final List<User> users;
+  const SignUpBirtDay({required this.user,/*  required this.users, */ super.key});
+  /* final List<User> users; */
 
   final User user;
   @override
@@ -51,7 +51,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
             Navigator.of(context).push(
               MaterialPageRoute(
                   builder: (context) => SignUpPhoneOrEmail(
-                      user: widget.user, users: widget.users)),
+                      user: widget.user,/*  users: widget.users */)),
             );
           }
           if (state is SetDateState) {

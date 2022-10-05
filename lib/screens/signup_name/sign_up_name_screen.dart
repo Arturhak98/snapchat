@@ -10,8 +10,8 @@ import '../signup_birtday/sign_up_birtday_screen.dart';
 import 'bloc/sign_up_name_block.dart';
 
 class SignUpName extends StatefulWidget {
-  const SignUpName({required this.Users, super.key});
-  final List<User> Users;
+  const SignUpName({/* required this.Users,  */super.key});
+ /*  final List<User> Users; */
   @override
   State<SignUpName> createState() => _SignUpNameState();
 }
@@ -37,7 +37,7 @@ class _SignUpNameState extends State<SignUpName> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) =>
-                    SignUpBirtDay(user: user, users: widget.Users),
+                    SignUpBirtDay(user: user, /* users: widget.Users */),
               ),
             );
           }

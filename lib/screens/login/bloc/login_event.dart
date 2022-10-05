@@ -14,8 +14,8 @@ class PassFieldEvent  extends LoginEvent{
   PassFieldEvent({required this.pass});
 }
 class LoginScrenLoadEvent extends LoginEvent{
-  List<User> users;
-  LoginScrenLoadEvent({required this.users});
+/*  /*  List<User> users; */
+  LoginScrenLoadEvent({required this.users}); */
 }
 class ObscureButtonEvent extends LoginEvent{
   bool passIsObscured;

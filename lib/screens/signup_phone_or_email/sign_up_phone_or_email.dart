@@ -14,12 +14,12 @@ import 'bloc/signup_phone_or_email_bloc_bloc.dart';
 
 class SignUpPhoneOrEmail extends StatefulWidget {
   const SignUpPhoneOrEmail({
-    required this.users,
+  /*   required this.users, */
     required this.user,
     super.key,
   });
 
-  final List<User> users;
+/*   final List<User> users; */
   final User user;
 
   @override
@@ -77,7 +77,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
             widget.user.emailOrPhoneNumber = state.emailorphonenumber;
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
-                    SignUpUserName(user: widget.user, users: widget.users)));
+                    SignUpUserName(user: widget.user,/*  users: widget.users */)));
           }
         },
         builder: (context, state) {
