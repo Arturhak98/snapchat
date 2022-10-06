@@ -4,15 +4,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/home/home_screen.dart';
 
 void main() {
-
-  runApp( const MaterialApp(supportedLocales: [
-   Locale('en', ''),
-  Locale('ru', ''),
+  runApp(const MaterialApp(supportedLocales: [
+    Locale('en', ''),
+    Locale('ru', ''),
   ], localizationsDelegates: [
-    AppLocalizations.delegate, 
+    AppLocalizations.delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
   ], home: HomeScreen()));
-  
 }

@@ -7,7 +7,6 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   late String _pass, _username;
-  /*  List<User> _users = []; */
   LoginBloc() : super(LoginInitial()) {
     on<NameFieldEvent>(_onNameFieldEvent);
     on<PassFieldEvent>(_onPassFieldEvent);
@@ -19,34 +18,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(PassObscureState(passIsObscured: !event.passIsObscured));
   }
 
-  void _onLoginScrenLoadEvent(LoginScrenLoadEvent event, Emitter emit) {
-    /* _users = event.users; */
-  }
+  void _onLoginScrenLoadEvent(LoginScrenLoadEvent event, Emitter emit) {}
 
   Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit) async {
-    //  var loginUser;
-    //bool usernameAndPassIsValid;
-    // var loginUser= DataBase.getUser(_username);
-    /*   _users.forEach((User user) {
-      if (user.userName == _username && user.password == _pass) {
-        loginUser = user;
-      }
-    }); */
-/*      if (loginUser.isNotEmpty) {
-      usernameAndPassIsValid = true;
-    } else {
-      usernameAndPassIsValid = false;
-      loginUser=User();
-    }  */
     var query;
     var user;
     await DataBase.getUser(_username).then((value) => query = value);
     if (query.isNotEmpty) {
       user = User.fromMap(query.first);
       if (user.password == _pass) {
-     /*    usernameAndPassIsValid = true; */
-        emit(UserNameAndPassValidState(
-          /*   entryallow: usernameAndPassIsValid,  */loginUser: user));
+        emit(UserNameAndPassValidState(loginUser: user));
       } else {
         emit(UserNameOrPassIsNotValid());
       }

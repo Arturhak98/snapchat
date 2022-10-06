@@ -10,8 +10,7 @@ import '../user/user_screen.dart';
 import 'bloc/login_bloc.dart';
 
 class LogInScreen extends StatefulWidget {
-  const LogInScreen({ super.key});
- // final List<User> users;
+  const LogInScreen({super.key});
   @override
   State<LogInScreen> createState() => _LogInState();
 }
@@ -25,7 +24,7 @@ class _LogInState extends State<LogInScreen> {
 
   @override
   void initState() {
-    _bloc.add(LoginScrenLoadEvent(/* users: widget.users */));
+    _bloc.add(LoginScrenLoadEvent());
     super.initState();
   }
 
@@ -39,13 +38,14 @@ class _LogInState extends State<LogInScreen> {
             _isUsernameValid = state.isUserNameValid;
           }
           if (state is UpdatePassValid) {
+            _usernameAndPassIsValid=true;
             _isPassValid = state.IsPassValid;
           }
-          if(state is PassObscureState){
-            _visibility=state.passIsObscured;
+          if (state is PassObscureState) {
+            _visibility = state.passIsObscured;
           }
-          if(state is UserNameOrPassIsNotValid){
-            _usernameAndPassIsValid=false;
+          if (state is UserNameOrPassIsNotValid) {
+            _usernameAndPassIsValid = false;
           }
           if (state is UserNameAndPassValidState) {
             _usernameAndPassIsValid = true;
@@ -70,7 +70,6 @@ class _LogInState extends State<LogInScreen> {
               _renderPassTitle(),
               _renderLogInPassword(),
               _renderPassErrorText(),
-              _renderLoginErrorText(),
               _renderForgotPasswordButton(),
             ],
           );
@@ -84,7 +83,7 @@ class _LogInState extends State<LogInScreen> {
       padding: const EdgeInsets.only(top: 70),
       child: Center(
         child: Text(
-           AppLocalizations.of(context)!.logintitle,
+          AppLocalizations.of(context)!.logintitle,
           style: TitleStyle,
         ),
       ),
@@ -94,7 +93,8 @@ class _LogInState extends State<LogInScreen> {
   Widget _renderUsernameTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 30),
-      child: Text( AppLocalizations.of(context)!.loginfieldtitle, style: FieldTitleStyle),
+      child: Text(AppLocalizations.of(context)!.loginfieldtitle,
+          style: FieldTitleStyle),
     );
   }
 
@@ -108,14 +108,14 @@ class _LogInState extends State<LogInScreen> {
   Widget _renderUsernameErrorText() {
     return ErorrText(
         isValid: _isUsernameValid,
-        errorText:  AppLocalizations.of(context)!.loginfielderror);
+        errorText: AppLocalizations.of(context)!.loginfielderror);
   }
 
   Widget _renderPassTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Text(
-         AppLocalizations.of(context)!.loginfieldpasstitle,
+        AppLocalizations.of(context)!.loginfieldpasstitle,
         style: FieldTitleStyle,
       ),
     );
@@ -134,7 +134,7 @@ class _LogInState extends State<LogInScreen> {
   Widget _renderObscureButton() {
     return IconButton(
       onPressed: () {
-      _bloc.add(ObscureButtonEvent(passIsObscured: _visibility));
+        _bloc.add(ObscureButtonEvent(passIsObscured: _visibility));
       },
       icon: Icon(_visibility
           ? Icons.visibility_off_sharp
@@ -144,15 +144,12 @@ class _LogInState extends State<LogInScreen> {
 
   Widget _renderPassErrorText() {
     return ErorrText(
-        isValid: _isPassValid,
-        errorText:  AppLocalizations.of(context)!.loginfieldpasserror);
+        isValid: _isPassValid && _usernameAndPassIsValid,
+        errorText: _usernameAndPassIsValid
+            ? AppLocalizations.of(context)!.loginfieldpasserror
+            : AppLocalizations.of(context)!.loginerror);
   }
 
-  Widget _renderLoginErrorText() {
-    return ErorrText(
-        isValid: _usernameAndPassIsValid,
-        errorText: AppLocalizations.of(context)!.loginerror);
-  }
 
   Widget _renderForgotPasswordButton() {
     return Padding(
@@ -160,7 +157,7 @@ class _LogInState extends State<LogInScreen> {
       child: Center(
         child: TextButton(
           onPressed: () {},
-          child:  Text( AppLocalizations.of(context)!.forgotpass),
+          child: Text(AppLocalizations.of(context)!.forgotpass),
         ),
       ),
     );

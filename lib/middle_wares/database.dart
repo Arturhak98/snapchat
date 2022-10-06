@@ -20,11 +20,8 @@ abstract class DataBase {
   static Future<List> getUser(String username) async {
     final user = await _usersdb!
         .query('users', where: 'username = ?', whereArgs: [username]);
-/*     if (user.isNotEmpty) { */
-      return /* User.fromMap( */user;/* .first); */
-    /* }
-    return null; */
-    /* user.isNotEmpty ? */ /* : Null;  */
+      return user;
+
   }
 
   static Future<void> onCreate(Database db, int version) async {

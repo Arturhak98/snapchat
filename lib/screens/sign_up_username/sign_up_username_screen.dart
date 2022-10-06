@@ -11,9 +11,9 @@ import 'bloc/sign_up_username_bloc.dart';
 
 class SignUpUserName extends StatefulWidget {
   const SignUpUserName(
-      {/* required this.users, */ required this.user, super.key});
+      { required this.user, super.key});
   final User user;
-/*   final List<User> users; */
+
 
   @override
   State<SignUpUserName> createState() => _SignUpUserNameState();
@@ -36,13 +36,13 @@ class _SignUpUserNameState extends State<SignUpUserName> {
               MaterialPageRoute(
                 builder: (context) => SignUpPassword(
                   user: widget.user,
-                  /*  users: widget.users, */
+                  
                 ),
               ),
             );
           }
           if (state is UpdateUsernameValid) {
-            _usernameIsBusy=true;
+            _usernameIsBusy = true;
             _isValid = state.isUsernameValid;
           }
           if (state is UsernameIsBusy) {
@@ -59,7 +59,6 @@ class _SignUpUserNameState extends State<SignUpUserName> {
               _renderFieldTitle(),
               _renderUsernameField(),
               _renderErrorText(),
-            /*   _renderUsernameBusyErrorText(), */
             ]),
       ),
     );
@@ -108,21 +107,14 @@ class _SignUpUserNameState extends State<SignUpUserName> {
 
   Widget _renderErrorText() {
     return Padding(
-      padding: const EdgeInsets.only(bottom:  100),
+      padding: const EdgeInsets.only(bottom: 100),
       child: ErorrText(
           isValid: _isValid && _usernameIsBusy,
-          errorText:_usernameIsBusy?AppLocalizations.of(context)!.usernamefielderror:AppLocalizations.of(context)!.usernamebusytext),
+          errorText: _usernameIsBusy
+              ? AppLocalizations.of(context)!.usernamefielderror
+              : AppLocalizations.of(context)!.usernamebusytext),
     );
   }
-
- /*  Widget _renderUsernameBusyErrorText() {
-    return Padding(
-        padding: const EdgeInsets.only(bottom: 100),
-        child: ErorrText(
-          isValid: _usernameIsBusy,
-          errorText: AppLocalizations.of(context)!.usernamebusytext,
-        ));
-  } */
 
   void _onPressNextButton() {
     _bloc.add(NextButtonEvent());

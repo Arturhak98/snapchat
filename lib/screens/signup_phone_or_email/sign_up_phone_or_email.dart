@@ -14,12 +14,10 @@ import 'bloc/signup_phone_or_email_bloc_bloc.dart';
 
 class SignUpPhoneOrEmail extends StatefulWidget {
   const SignUpPhoneOrEmail({
-  /*   required this.users, */
     required this.user,
     super.key,
   });
 
-/*   final List<User> users; */
   final User user;
 
   @override
@@ -75,9 +73,13 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
           }
           if (state is UpdateUserState) {
             widget.user.emailOrPhoneNumber = state.emailorphonenumber;
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    SignUpUserName(user: widget.user,/*  users: widget.users */)));
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SignUpUserName(
+                  user: widget.user,
+                ),
+              ),
+            );
           }
         },
         builder: (context, state) {
@@ -248,9 +250,12 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   }
 
   Widget _renderEmailErrorText() {
-    return ErorrText(
-        isValid: _validEmail,
-        errorText: AppLocalizations.of(context)!.emailfieladerror);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 100),
+      child: ErorrText(
+          isValid: _validEmail,
+          errorText: AppLocalizations.of(context)!.emailfieladerror),
+    );
   }
 
   Future<void> _showErroeMsg(String ErrorMsg) async {

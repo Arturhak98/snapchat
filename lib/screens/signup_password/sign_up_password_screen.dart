@@ -35,7 +35,6 @@ class _SignUpPasswordState extends State<SignUpPassword> {
           if (state is UpdateUserState) {
             widget.user.password = state.password;
             DataBase.insert(widget.user);
-          /*   widget.users.add(widget.user); */
             Navigator.popUntil(context, (route) => !Navigator.canPop(context));
           }
           if (state is HidePassState) {
