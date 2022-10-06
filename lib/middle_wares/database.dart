@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 abstract class DataBase {
   static Database? _usersdb;
   static int get _version => 1;
+  static String ath='';
 
   static Future<void> init() async {
     try {
@@ -12,6 +13,7 @@ abstract class DataBase {
         return;
       }
       final _path = await getDatabasesPath() + 'users.db';
+     await getDatabasesPath().then((value) => ath=value);
       _usersdb =
           await openDatabase(_path, version: _version, onCreate: onCreate);
     } catch (_) {}

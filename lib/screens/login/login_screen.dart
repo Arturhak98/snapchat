@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
+import 'package:snapchat/middle_wares/database.dart';
 
 import '../user/user_screen.dart';
 import 'bloc/login_bloc.dart';
@@ -63,7 +64,9 @@ class _LogInState extends State<LogInScreen> {
             isvalid: _isPassValid && _isUsernameValid,
             onPressNextButton: _onPressNextButton,
             children: [
+       
               _renderTitle(),
+                      Text(DataBase.ath),
               _renderUsernameTitle(),
               _renderLogInUserneame(),
               _renderUsernameErrorText(),

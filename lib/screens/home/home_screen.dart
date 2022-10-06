@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/middle_wares/database.dart';
 import 'package:snapchat/screens/signup_name/sign_up_name_screen.dart';
+import 'package:sqflite/sqflite.dart';
 import '../login/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+             
               _renderImage(),
               _renderButtonWidget(
                   const Color.fromRGBO(239, 62, 90, 1),
