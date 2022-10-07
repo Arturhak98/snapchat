@@ -1,3 +1,0 @@
-arb_dir: ./lib/screens/l10n
-template-arb-file: snapchat_en.arb
-output-localization-file: snapchat_localization.dart

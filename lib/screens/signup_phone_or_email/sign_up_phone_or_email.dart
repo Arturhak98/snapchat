@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
+import 'package:localization/localization.dart';
+//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
@@ -91,7 +92,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
 
   Widget _signUpPhoneScreen() {
     return ScreenSample(
-      buttonText: AppLocalizations.of(context)!.nextbutton,
+      buttonText: 'nextbutton'.i18n(),
       onPressNextButton: _onPressPhoneNextButton,
       isvalid: _validNumber && _countriesLoaded,
       children: [
@@ -107,7 +108,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
 
   Widget _signUpEmailScreen() {
     return ScreenSample(
-        buttonText: AppLocalizations.of(context)!.nextbutton,
+        buttonText: 'nextbutton'.i18n(),
         isvalid: _validEmail,
         onPressNextButton: _onPressEmailNextButton,
         children: [
@@ -124,7 +125,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
       padding: const EdgeInsets.only(top: 160),
       child: Center(
         child: Text(
-          AppLocalizations.of(context)!.phonetitle,
+          'phonetitle'.i18n(),
           style: TitleStyle,
         ),
       ),
@@ -136,7 +137,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
       child: TextButton(
         onPressed: () =>
             _bloc.add(ChangeScreenButtonEvent(visibility: _visibility)),
-        child: Text(AppLocalizations.of(context)!.phonebutton),
+        child: Text('phonebutton'.i18n()),
       ),
     );
   }
@@ -145,7 +146,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        AppLocalizations.of(context)!.phonefieldtitle,
+        'phonefieldtitle'.i18n(),
         style: const TextStyle(
           color: Colors.blueAccent,
         ),
@@ -189,7 +190,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
                   selectedCountry.CountryCode,
               style: const TextStyle(fontSize: 20),
             )
-          : Text(AppLocalizations.of(context)!.loading,
+          : Text('loading'.i18n(),
               style: const TextStyle(fontSize: 20)),
     );
   }
@@ -197,14 +198,14 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   Widget _renderErrorNumberTextWidget() {
     return ErorrText(
         isValid: _validNumber,
-        errorText: AppLocalizations.of(context)!.phonefielderror);
+        errorText: 'phonefielderror'.i18n());
   }
 
   Widget _renderPhoneText() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 100),
       child: Text(
-        AppLocalizations.of(context)!.phoneinfotext,
+        'phoneinfotext'.i18n(),
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
     );
@@ -215,7 +216,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
       child: Padding(
         padding: const EdgeInsets.only(top: 120),
         child: Text(
-          AppLocalizations.of(context)!.emailtitle,
+          'emailtitle'.i18n(),
           style: TitleStyle,
         ),
       ),
@@ -227,7 +228,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
       child: TextButton(
         onPressed: () =>
             _bloc.add(ChangeScreenButtonEvent(visibility: _visibility)),
-        child: Text(AppLocalizations.of(context)!.emailbutton),
+        child: Text('emailbutton'.i18n()),
       ),
     );
   }
@@ -236,7 +237,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        AppLocalizations.of(context)!.emailfieldtitle,
+        'emailfieldtitle'.i18n(),
         style: FieldTitleStyle,
       ),
     );
@@ -254,7 +255,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
       padding: const EdgeInsets.only(bottom: 100),
       child: ErorrText(
           isValid: _validEmail,
-          errorText: AppLocalizations.of(context)!.emailfieladerror),
+          errorText: 'emailfieladerror'.i18n()),
     );
   }
 

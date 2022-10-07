@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:snapchat/components/models/countries.dart';
 import 'package:snapchat/components/models/country_code.dart';
 
-
-
 part 'signup_phone_or_email_bloc_event.dart';
 part 'signup_phone_or_email_bloc_state.dart';
 

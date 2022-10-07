@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
+import 'package:localization/localization.dart';
+//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
@@ -44,7 +45,7 @@ class _SignUpNameState extends State<SignUpName> {
         },
         builder: (context, state) {
           return ScreenSample(
-              buttonText: AppLocalizations.of(context)!.namebutton,
+              buttonText: 'namebutton'.i18n(),
               isvalid: _isLastNameValid && _isNameValid,
               onPressNextButton: _onPressNextButton,
               children: [
@@ -69,7 +70,7 @@ class _SignUpNameState extends State<SignUpName> {
       padding: const EdgeInsets.only(top: 50),
       child: Center(
         child: Text(
-          AppLocalizations.of(context)!.nametitle,
+          'nametitle'.i18n(),
           style: TitleStyle,
         ),
       ),
@@ -80,7 +81,7 @@ class _SignUpNameState extends State<SignUpName> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        AppLocalizations.of(context)!.namefieldtitle,
+       'namefieldtitle'.i18n(),
         style: FieldTitleStyle,
       ),
     );
@@ -98,14 +99,14 @@ class _SignUpNameState extends State<SignUpName> {
   Widget _renderErrorTextName() {
     return ErorrText(
         isValid: _isNameValid,
-        errorText: AppLocalizations.of(context)!.namefielderror);
+        errorText: 'namefielderror'.i18n());
   }
 
   Widget _renderLastNameTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 5),
       child: Text(
-        AppLocalizations.of(context)!.lastnamefieldtitle,
+        'lastnamefieldtitle'.i18n(),
         style: FieldTitleStyle,
       ),
     );
@@ -120,7 +121,7 @@ class _SignUpNameState extends State<SignUpName> {
   Widget _renderErrorTextLastName() {
     return ErorrText(
         isValid: _isLastNameValid,
-        errorText: AppLocalizations.of(context)!.lastnamefielderror);
+        errorText: 'lastnamefielderror'.i18n());
   }
 
   Widget _renderInfoText() {
@@ -128,7 +129,7 @@ class _SignUpNameState extends State<SignUpName> {
       padding:const EdgeInsets.only(
         top: 5,
       ),
-      child: Text(AppLocalizations.of(context)!.infotext),
+      child: Text('infotext'.i18n()),
     );
   }
 
@@ -137,9 +138,9 @@ class _SignUpNameState extends State<SignUpName> {
       padding: const EdgeInsets.only(top: 1),
       child: Row(
         children: [
-           Text(AppLocalizations.of(context)!.privacypolicytext),
+           Text('privacypolicytext'.i18n()),
           _renderPrivacyPolicyButton(),
-           Text(AppLocalizations.of(context)!.afterprivacypolicytext),
+           Text('afterprivacypolicytext'.i18n()),
         ],
       ),
     );
@@ -149,7 +150,7 @@ class _SignUpNameState extends State<SignUpName> {
     return GestureDetector(
       onTap: () {},
       child:  Text(
-        AppLocalizations.of(context)!.privacypolicybuttontext,
+        'privacypolicybuttontext'.i18n(),
         style:const TextStyle(color: Colors.blueAccent),
       ),
     );
@@ -159,7 +160,7 @@ class _SignUpNameState extends State<SignUpName> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text(AppLocalizations.of(context)!.servicetermstext),
+         Text('servicetermstext'.i18n()),
         _renderServiceTermsButton(),
       ],
     );
@@ -171,7 +172,7 @@ class _SignUpNameState extends State<SignUpName> {
       child: GestureDetector(
         onTap: () {},
         child:  Text(
-           AppLocalizations.of(context)!.servicetermsbutton,
+           'servicetermsbutton'.i18n(),
           style:const TextStyle(color: Colors.blueAccent),
         ),
       ),

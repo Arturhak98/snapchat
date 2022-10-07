@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
+import 'package:localization/localization.dart';
+//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
@@ -43,7 +44,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
         },
         builder: (context, state) {
           return ScreenSample(
-            buttonText:  AppLocalizations.of(context)!.nextbutton,
+            buttonText:  'nextbutton'.i18n(),
             isvalid: _isValid,
             onPressNextButton: _onPressPhoneNextButton,
             children: [
@@ -64,7 +65,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
       padding: const EdgeInsets.only(top: 160),
       child: Center(
         child: Text(
-          AppLocalizations.of(context)!.passtitle,
+          'passtitle'.i18n(),
           style: TitleStyle,
         ),
       ),
@@ -74,7 +75,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   Widget _renderSecondTitle() {
     return  Center(
       child: Text(
-       AppLocalizations.of(context)!.passsecondtitle,
+       'passsecondtitle'.i18n(),
         style:const TextStyle(
             color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
       ),
@@ -85,7 +86,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        AppLocalizations.of(context)!.passfieldtitle,
+        'passfieldtitle'.i18n(),
         style: FieldTitleStyle,
       ),
     );
@@ -105,7 +106,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
     return _passController.text.isEmpty
         ? Container()
         : TextButton(
-            child:  Text(AppLocalizations.of(context)!.hide),
+            child:  Text('hide'.i18n()),
             onPressed: () => _bloc.add(HidePassEvent(hidepass: _hidePass)),
           );
   }
@@ -115,7 +116,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
       padding: const EdgeInsets.only(bottom: 100),
       child: ErorrText(
           isValid: _isValid,
-          errorText: AppLocalizations.of(context)!.passfilederror),
+          errorText: 'passfilederror'.i18n()),
     );
   }
 

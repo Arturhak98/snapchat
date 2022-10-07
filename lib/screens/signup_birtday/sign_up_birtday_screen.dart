@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
+//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:intl/intl.dart';
+import 'package:localization/localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/back_button.dart';
@@ -58,8 +59,13 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
             _selectDateText = state.birtdayText;
           }
         },
-        builder: (context, state) {
-          return ChangeFocus(
+        builder: (context, state) => _render()
+      ),
+    );
+  }
+
+  Widget _render() {
+           return ChangeFocus(
             child: Scaffold(
               body: Stack(
                 children: [
@@ -90,15 +96,12 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
               ),
             ),
           );
-        },
-      ),
-    );
   }
 
   Widget _renderTitle() {
     return Center(
         child: Text(
-      AppLocalizations.of(context)!.birthdaytitle,
+      'birthdaytitle'.i18n(),
       style: TitleStyle,
     ));
   }
@@ -107,7 +110,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        AppLocalizations.of(context)!.birthdayfieldtitle,
+        'birthdayfieldtitle'.i18n(),
         style: FieldTitleStyle,
       ),
     );
@@ -124,7 +127,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
   Widget _renderErrorTextWidget() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 170),
-      child: ErorrText(errorText: AppLocalizations.of(context)!.birthdayfielderror, isValid: _isValid),
+      child: ErorrText(errorText: 'birthdayfielderror'.i18n(), isValid: _isValid),
     );
   }
 
@@ -133,7 +136,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
       alignment: Alignment.bottomCenter,
       child: NextButton(
         OnButtonTup: _onPressNextButton,
-        buttonText:  AppLocalizations.of(context)!.nextbutton,
+        buttonText:  'nextbutton'.i18n(),
         isValid: _isValid,
       ),
     );

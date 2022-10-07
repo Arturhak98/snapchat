@@ -32,7 +32,7 @@ class User {
       lastName: user['lastName'] as String,
       dateOfBirthday: DateTime.parse(user['dateOfBirthday']) ,
       emailOrPhoneNumber: user['emailOrPhoneNumber'].toString(),
-      userName:user['username'] as String,
+      userName:user['userName'] as String,
       password: user['password'] as String,
     );
   }

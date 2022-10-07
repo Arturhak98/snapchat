@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
+import 'package:localization/localization.dart';
+//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
@@ -50,7 +51,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
           }
         },
         builder: (context, state) => ScreenSample(
-            buttonText: AppLocalizations.of(context)!.nextbutton,
+            buttonText: 'nextbutton'.i18n(),
             isvalid: _isValid,
             onPressNextButton: _onPressNextButton,
             children: [
@@ -69,7 +70,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
         padding: const EdgeInsets.only(top: 160),
         child: Center(
           child: Text(
-            AppLocalizations.of(context)!.usarnmaetitle,
+            'usarnmaetitle'.i18n(),
             style: TitleStyle,
           ),
         ));
@@ -78,7 +79,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
   Widget _renderSecondTitle() {
     return Center(
       child: Text(
-        AppLocalizations.of(context)!.usarnamesecondtitle,
+        'usarnamesecondtitle'.i18n(),
         style: const TextStyle(
           color: Colors.grey,
           fontWeight: FontWeight.bold,
@@ -92,7 +93,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        AppLocalizations.of(context)!.usernamefieldtitle,
+        'usernamefieldtitle'.i18n(),
         style: FieldTitleStyle,
       ),
     );
@@ -111,8 +112,8 @@ class _SignUpUserNameState extends State<SignUpUserName> {
       child: ErorrText(
           isValid: _isValid && _usernameIsBusy,
           errorText: _usernameIsBusy
-              ? AppLocalizations.of(context)!.usernamefielderror
-              : AppLocalizations.of(context)!.usernamebusytext),
+              ? 'usernamefielderror'.i18n()
+              : 'usernamebusytext'.i18n()),
     );
   }
 

@@ -1,0 +1,59 @@
+{
+    "login":"ВХОД",
+    "signup":"РЕГИСТРАЦИЯ " ,
+ 
+     "logintitle":"Вход",
+     "loginfieldtitle":"ИМЯ ПОЛЬЗОВАТЕЛЯ ИЛИ ЭЛЕКТРОННАЯ ПОЧТА",
+     "loginfielderror":"Длина ПОЛЬЗОВАТЕЛЯ должна быть больше 0",
+     "loginfieldpasstitle":"ПАРОЛЬ",
+     "loginfieldpasserror":"Длина ПАРОЛЯ должна быть больше 7",
+     "forgotpass":"Забыли пароль?",
+     "loginerror":"Логин или пароль неверны",
+     "loginbutton":"Вход",
+ 
+     "nametitle":"Как тебя зовут?",
+     "namefieldtitle":"ИМЯ",
+     "namefielderror":"Длина ИМЕНИ должна быть больше 0",
+     "lastnamefieldtitle":"ФАМИЛИЯ",
+     "lastnamefielderror":"Длина ФАМИЛИИ должна быть больше 0",
+     "infotext":"Нажимая «Зарегистрироваться и принять», вы подтверждаете что вы прочитали",
+     "privacypolicytext":"",
+     "privacypolicybuttontext":"Политику конфиденциальности ",
+     "afterprivacypolicytext":"и Согласны",
+     "servicetermstext":"с ",
+     "servicetermsbutton":"Условиями  обслуживания",
+     "namebutton":"Зарегистрироваться и\n              принять",
+ 
+     "birthdaytitle":"Когда у тебя день рождения?",
+     "birthdayfieldtitle":"ДЕНЬ РОЖДЕНИЯ",
+     "birthdayfielderror":"возраст должен быть больше 16",
+ 
+    "emailtitle":"   Какой у вас адрес\n электронной почты?",
+    "emailbutton":"Зарегистрируйтесь с помощью телефона",
+    "emailfieldtitle":"ЭЛЕКТРОННАЯ ПОЧТА",
+    "emailfieladerror":"пожалуйста, введите действительный адрес электронной почты",
+ 
+    "phonetitle":"Какой у вас номер мобильного?",
+    "phonebutton":"Зарегистрируйтесь по электронной почте",
+    "phonefieldtitle":"МОБИЛЬНЫЙ НОМЕР",
+    "phonefielderror":"длина номера должна быть больше 0",
+    "phoneinfotext":"Мы будем  Отправить  вам SMS с кодом подтверждения",
+    "loading":"Загрузка...",
+ 
+    "usarnmaetitle":"Выберите имя пользователя",
+     "usarnamesecondtitle":"Ваше имя пользователя — это то, как друзья\n               добавляют вас в Snapchat",
+     "usernamefieldtitle":"ИМЯ ПОЛЬЗОВАТЕЛЯ",
+     "usernamefielderror":"Длина ИМЕНИ ПОЛЬЗОВАТЕЛЯ должна быть больше 4",
+     "usernamebusytext":"Имя пользователя занято",
+    
+ 
+     "passtitle":"Установить пароль",
+     "passsecondtitle":"Ваш пароль должен содержать не менее 8 \n                                символов",
+     "passfieldtitle":"ПАРОЛЬ",
+     "passfilederror":"Длина ПАРОЛЯ должна быть больше 7",
+     "hide":"Скрывать",
+ 
+     "nextbutton":"Продолжить"
+ 
+ 
+ }

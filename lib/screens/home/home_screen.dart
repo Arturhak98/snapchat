@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
+import 'package:localization/localization.dart';
+//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/middle_wares/database.dart';
 import 'package:snapchat/screens/signup_name/sign_up_name_screen.dart';
-import 'package:sqflite/sqflite.dart';
 import '../login/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,12 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
               _renderImage(),
               _renderButtonWidget(
                   const Color.fromRGBO(239, 62, 90, 1),
-                  AppLocalizations.of(context)!.login,
+                  'login'.i18n(),
                   context,
                 const  LogInScreen()),
               _renderButtonWidget(
                   const Color.fromRGBO(36, 175, 252, 1),
-                  AppLocalizations.of(context)!.signup,
+                  'signup'.i18n(),
                   context,
                 const  SignUpName()),
             ],
