@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/middle_wares/database.dart';
 import 'package:snapchat/screens/signup_name/sign_up_name_screen.dart';
 import '../login/login_screen.dart';

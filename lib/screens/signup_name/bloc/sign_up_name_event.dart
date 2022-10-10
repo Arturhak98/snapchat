@@ -2,8 +2,6 @@ part of 'sign_up_name_block.dart';
 
 abstract class SignUpNameEvent{}
 
-class NextButtonEvent extends SignUpNameEvent{}
-
 class NameFieldEvent extends SignUpNameEvent{
   String name;
   NameFieldEvent({required this.name});

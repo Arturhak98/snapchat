@@ -5,7 +5,6 @@ part 'sign_up_username_state.dart';
 
 class SignUpUsernameBloc
     extends Bloc<SignUpUsernameEvent, SignUpUsernameState> {
-  late String _username;
 
   SignUpUsernameBloc() : super(SignUpUsernameInitial()) {
     on<UsernameFieldEvent>(_onUsernameFieldEvent);
@@ -14,21 +13,20 @@ class SignUpUsernameBloc
 
   Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit)async {
     var query;
-   await DataBase.getUser(_username).then((value) => query=value);
-    if (query.isEmpty) {
-      emit(UpdateUserState(username: _username));
-    } else {
+   await DataBase.getUser(event.userName).then((value) => query=value);
+    if(query.isNotEmpty){
       emit(UsernameIsBusy());
+    }else{
+      emit(UpdateUserState());
     }
   }
 
   void _onUsernameFieldEvent(UsernameFieldEvent event, Emitter emit) {
-    _username = event.username;
-    emit(UpdateUsernameValid(isUsernameValid: _isValid));
+    emit(UpdateUsernameValid(isUsernameValid: _isValid(event.username)));
   }
 
-  bool get _isValid {
-    if (_username.length >= 5) {
+  bool  _isValid(String username) {
+    if (username.length >= 5) {
       return true;
     }
     return false;

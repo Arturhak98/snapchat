@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
-//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
@@ -26,22 +25,19 @@ class SignUpPhoneOrEmail extends StatefulWidget {
 }
 
 class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
-  Country selectedCountry = Country(
-    CountryCode: '',
-    CountryName: '',
-    CountryCodeString: '',
-  );
-
-  bool _visibility = true,
-      _validEmail = false,
-      _validNumber = false,
-      _countriesLoaded = false;
+  Country selectedCountry =
+      Country(CountryCode: '', CountryName: '', CountryCodeString: '');
+  bool _visibility = true;
+  bool _validEmail = false;
+  bool _validNumber = false;
+  bool _countriesLoaded = false;
+  final _phoneController = TextEditingController();
+  final _emailContrroler = TextEditingController();
   var _countries = <Country>[];
-  late final SignupPhoneOrEmailBloc _bloc;
+  final SignupPhoneOrEmailBloc _bloc = SignupPhoneOrEmailBloc();
 
   @override
   void initState() {
-    _bloc = SignupPhoneOrEmailBloc();
     _bloc.add(SignUpPhoneLoadEvent());
     super.initState();
   }
@@ -51,38 +47,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<SignupPhoneOrEmailBloc, SignupPhoneOrEmailState>(
-        listener: (context, state) {
-          if (state is ShowErrorAlertState) {
-            _showErroeMsg(state.erorrMsg);
-          }
-          if (state is UpdateEmailValid) {
-            _validEmail = state.emailISValid;
-          }
-          if (state is UpdateScreen) {
-            _visibility = state.visibility;
-          }
-          if (state is UpdatePhoneValid) {
-            _validNumber = state.numberIsValid;
-          }
-          if (state is SetCountriesState) {
-            _countries = state.countries;
-            selectedCountry = state.selectedCountry;
-            _countriesLoaded = true;
-          }
-          if (state is SetSelectedCountryState) {
-            selectedCountry = state.selectedCountry;
-          }
-          if (state is UpdateUserState) {
-            widget.user.emailOrPhoneNumber = state.emailorphonenumber;
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => SignUpUserName(
-                  user: widget.user,
-                ),
-              ),
-            );
-          }
-        },
+        listener: _signUpPhoneOrEmailListner,
         builder: (context, state) {
           return _visibility ? _signUpEmailScreen() : _signUpPhoneScreen();
         },
@@ -135,8 +100,9 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   Widget _renderPhoneButton() {
     return Center(
       child: TextButton(
-        onPressed: () =>
-            _bloc.add(ChangeScreenButtonEvent(visibility: _visibility)),
+        onPressed: () => setState(() {
+          _visibility = !_visibility;
+        }),
         child: Text('phonebutton'.i18n()),
       ),
     );
@@ -156,6 +122,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
 
   Widget _renderNumberField() {
     return TextField(
+      controller: _phoneController,
       onChanged: (value) => _bloc.add(NumberFieldEvent(phoneNumber: value)),
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       autofocus: true,
@@ -190,15 +157,13 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
                   selectedCountry.CountryCode,
               style: const TextStyle(fontSize: 20),
             )
-          : Text('loading'.i18n(),
-              style: const TextStyle(fontSize: 20)),
+          : Text('loading'.i18n(), style: const TextStyle(fontSize: 20)),
     );
   }
 
   Widget _renderErrorNumberTextWidget() {
     return ErorrText(
-        isValid: _validNumber,
-        errorText: 'phonefielderror'.i18n());
+        isValid: _validNumber, errorText: 'phonefielderror'.i18n());
   }
 
   Widget _renderPhoneText() {
@@ -226,8 +191,9 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   Widget _renderEmailButton() {
     return Center(
       child: TextButton(
-        onPressed: () =>
-            _bloc.add(ChangeScreenButtonEvent(visibility: _visibility)),
+        onPressed: () => setState(() {
+          _visibility = !_visibility;
+        }),
         child: Text('emailbutton'.i18n()),
       ),
     );
@@ -245,6 +211,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
 
   Widget _renderEmailField() {
     return TextField(
+      controller: _emailContrroler,
       onChanged: (value) => {_bloc.add(EmailFieldEvent(email: value))},
       autofocus: true,
     );
@@ -253,9 +220,8 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   Widget _renderEmailErrorText() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 100),
-      child: ErorrText(
-          isValid: _validEmail,
-          errorText: 'emailfieladerror'.i18n()),
+      child:
+          ErorrText(isValid: _validEmail, errorText: 'emailfieladerror'.i18n()),
     );
   }
 
@@ -282,14 +248,50 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   }
 
   void _onPressPhoneNextButton() {
-    _bloc.add(PhoneNextButtonEvent());
+    widget.user.emailOrPhoneNumber = _phoneController.text;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SignUpUserName(
+          user: widget.user,
+        ),
+      ),
+    );
   }
 
   void _onPressEmailNextButton() {
-    _bloc.add(EmailNextButtonEvent());
+    widget.user.emailOrPhoneNumber = _emailContrroler.text;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SignUpUserName(
+          user: widget.user,
+        ),
+      ),
+    );
   }
 
   void ChangeCountry(Country country) {
-    _bloc.add(SelectCountryEvent(selectedCountry: country));
+    setState(() {
+      selectedCountry = country;
+    });
+  }
+}
+
+extension _BlocListener on _SignUpPhoneOrEmailState {
+  void _signUpPhoneOrEmailListner(
+      BuildContext context, SignupPhoneOrEmailState state) {
+    if (state is ShowErrorAlertState) {
+      _showErroeMsg(state.erorrMsg);
+    }
+    if (state is UpdateEmailValid) {
+      _validEmail = state.emailISValid;
+    }
+    if (state is UpdatePhoneValid) {
+      _validNumber = state.numberIsValid;
+    }
+    if (state is SetCountriesState) {
+      _countries = state.countries;
+      selectedCountry = state.selectedCountry;
+      _countriesLoaded = true;
+    }
   }
 }

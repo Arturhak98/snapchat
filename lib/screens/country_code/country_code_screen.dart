@@ -25,7 +25,6 @@ class _CountryCodeState extends State<CountryCode> {
 
   @override
   void initState() {
-    _bloc.add(CountryCodeScreenLoadEvent(countries: widget.countries));
     _filtredCountres = widget.countries;
     super.initState();
   }
@@ -35,16 +34,7 @@ class _CountryCodeState extends State<CountryCode> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<CountryCodeBloc, CountryCodeState>(
-        listener: (context, state) {
-          if (state is SelectCountryState) {
-            widget.OnCountryChanged(state.selectedCountry);
-            FocusManager.instance.primaryFocus?.unfocus();
-            Navigator.pop(context);
-          }
-          if (state is SearchCountriesState) {
-            _filtredCountres = state.filtredCountries;
-          }
-        },
+        listener: _countryBlocListner,
         builder: (context, state) {
           return ChangeFocus(
             child: Scaffold(
@@ -82,7 +72,8 @@ class _CountryCodeState extends State<CountryCode> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: TextField(
-        onChanged: (value) => _bloc.add(SearchFieldEvent(query: value)),
+        onChanged: (value) => _bloc
+            .add(SearchFieldEvent(query: value, countries: widget.countries)),
         decoration: SearchFieldBorderStyle,
       ),
     );
@@ -104,7 +95,10 @@ class _CountryCodeState extends State<CountryCode> {
 
   Widget _renderListViewElement(int index) {
     return GestureDetector(
-      onTap: () => _bloc.add(SelectCountryEvent(countryIndex: index)),
+      onTap: () => {
+        widget.OnCountryChanged(_filtredCountres[index]),
+        Navigator.pop(context),
+      },
       child: Column(
         children: [
           Row(
@@ -137,5 +131,18 @@ class _CountryCodeState extends State<CountryCode> {
         style: const TextStyle(fontSize: 20),
       ),
     );
+  }
+}
+
+extension _CountryBlocListner on _CountryCodeState {
+  void _countryBlocListner(BuildContext context, CountryCodeState state) {
+    if (state is SelectCountryState) {
+      widget.OnCountryChanged(state.selectedCountry);
+      FocusManager.instance.primaryFocus?.unfocus();
+      Navigator.pop(context);
+    }
+    if (state is SearchCountriesState) {
+      _filtredCountres = state.filtredCountries;
+    }
   }
 }

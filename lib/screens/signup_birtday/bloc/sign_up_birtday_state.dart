@@ -6,17 +6,7 @@ class SignUpBirtdayInitial extends SignUpBirtdayState {}
 
 class UpdateBirtdayValid extends SignUpBirtdayState {
   final bool birtdayValid;
-  final String seleqtedDate;
-  UpdateBirtdayValid({required this.birtdayValid, required this.seleqtedDate});
+  UpdateBirtdayValid({required this.birtdayValid, });
 }
 
-class SetDateState extends SignUpBirtdayState {
-  final DateTime birtday;
-  final String birtdayText;
-  SetDateState({required this.birtday, required this.birtdayText});
-}
 
-class UpdateUserState extends SignUpBirtdayState {
-  final DateTime birtday;
-  UpdateUserState({required this.birtday});
-}

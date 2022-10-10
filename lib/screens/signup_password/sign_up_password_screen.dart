@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
-//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
@@ -11,17 +10,17 @@ import 'package:snapchat/middle_wares/database.dart';
 import 'bloc/sign_up_pass_word_bloc.dart';
 
 class SignUpPassword extends StatefulWidget {
-  const SignUpPassword({/* required this.users, */ required this.user, super.key});
+  const SignUpPassword(
+      { required this.user, super.key});
   final User user;
- /*  final List<User> users; */
   @override
   State<SignUpPassword> createState() => _SignUpPasswordState();
 }
 
 class _SignUpPasswordState extends State<SignUpPassword> {
   final _passController = TextEditingController();
-  bool _isValid = false, _hidePass = false;
-
+  bool _isValid = false;
+  bool _hidePass = false;
   final SignUpPassWordBloc _bloc = SignUpPassWordBloc();
 
   @override
@@ -29,22 +28,10 @@ class _SignUpPasswordState extends State<SignUpPassword> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<SignUpPassWordBloc, SignUpPassWordState>(
-        listener: (context, state) {
-          if (state is UpdatePassValid) {
-            _isValid = state.isPassValid;
-          }
-          if (state is UpdateUserState) {
-            widget.user.password = state.password;
-            DataBase.insert(widget.user);
-            Navigator.popUntil(context, (route) => !Navigator.canPop(context));
-          }
-          if (state is HidePassState) {
-            _hidePass = state.passIsHide;
-          }
-        },
+        listener: _signUpPasswordListner,
         builder: (context, state) {
           return ScreenSample(
-            buttonText:  'nextbutton'.i18n(),
+            buttonText: 'nextbutton'.i18n(),
             isvalid: _isValid,
             onPressNextButton: _onPressPhoneNextButton,
             children: [
@@ -73,10 +60,10 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   }
 
   Widget _renderSecondTitle() {
-    return  Center(
+    return Center(
       child: Text(
-       'passsecondtitle'.i18n(),
-        style:const TextStyle(
+        'passsecondtitle'.i18n(),
+        style: const TextStyle(
             color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
       ),
     );
@@ -106,21 +93,31 @@ class _SignUpPasswordState extends State<SignUpPassword> {
     return _passController.text.isEmpty
         ? Container()
         : TextButton(
-            child:  Text('hide'.i18n()),
-            onPressed: () => _bloc.add(HidePassEvent(hidepass: _hidePass)),
+            child: Text('hide'.i18n()),
+            onPressed: () => setState(() {
+              _hidePass = !_hidePass;
+            }),
           );
   }
 
   Widget _renderErrorText() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 100),
-      child: ErorrText(
-          isValid: _isValid,
-          errorText: 'passfilederror'.i18n()),
+      child: ErorrText(isValid: _isValid, errorText: 'passfilederror'.i18n()),
     );
   }
 
   void _onPressPhoneNextButton() {
-    _bloc.add(NextButtonEvent());
+    widget.user.password = _passController.text;
+    DataBase.insert(widget.user);
+    Navigator.popUntil(context, (route) => !Navigator.canPop(context));
+  }
+}
+
+extension _SignUpPasswordListner on _SignUpPasswordState {
+  void _signUpPasswordListner(BuildContext context, SignUpPassWordState state) {
+    if (state is UpdatePassValid) {
+      _isValid = state.isPassValid;
+    }
   }
 }

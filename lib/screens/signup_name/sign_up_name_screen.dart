@@ -1,48 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
-//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
-
 import '../signup_birtday/sign_up_birtday_screen.dart';
 import 'bloc/sign_up_name_block.dart';
 
 class SignUpName extends StatefulWidget {
   const SignUpName({super.key});
-
   @override
   State<SignUpName> createState() => _SignUpNameState();
 }
 
 class _SignUpNameState extends State<SignUpName> {
   final SignUpNameBloc _bloc = SignUpNameBloc();
-  bool _isNameValid = false, _isLastNameValid = false;
+  bool _isNameValid = false;
+  bool _isLastNameValid = false;
+  final _lastNameController = TextEditingController();
+  final _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<SignUpNameBloc, SignUpNameState>(
-        listener: (context, state) {
-          if (state is UpdateLastNameValid) {
-            _isLastNameValid = state.isLastNameValid;
-          }
-          if (state is UpdateNameValid) {
-            _isNameValid = state.isNameValid;
-          }
-          if (state is UpdateUserState) {
-            final user = User(name: state.name, lastName: state.lastName);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) =>
-                    SignUpBirtDay(user: user, ),
-              ),
-            );
-          }
-        },
+        listener: _signupNameListener,
         builder: (context, state) {
           return ScreenSample(
               buttonText: 'namebutton'.i18n(),
@@ -81,7 +65,7 @@ class _SignUpNameState extends State<SignUpName> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-       'namefieldtitle'.i18n(),
+        'namefieldtitle'.i18n(),
         style: FieldTitleStyle,
       ),
     );
@@ -89,6 +73,7 @@ class _SignUpNameState extends State<SignUpName> {
 
   Widget _renderNameField() {
     return TextField(
+      controller: _nameController,
       autofocus: true,
       onChanged: (value) => {
         _bloc.add(NameFieldEvent(name: value)),
@@ -97,9 +82,7 @@ class _SignUpNameState extends State<SignUpName> {
   }
 
   Widget _renderErrorTextName() {
-    return ErorrText(
-        isValid: _isNameValid,
-        errorText: 'namefielderror'.i18n());
+    return ErorrText(isValid: _isNameValid, errorText: 'namefielderror'.i18n());
   }
 
   Widget _renderLastNameTitle() {
@@ -114,19 +97,19 @@ class _SignUpNameState extends State<SignUpName> {
 
   Widget _renderLastNameField() {
     return TextField(
+      controller: _lastNameController,
       onChanged: (value) => {_bloc.add(LastNameFieldEvent(lastName: value))},
     );
   }
 
   Widget _renderErrorTextLastName() {
     return ErorrText(
-        isValid: _isLastNameValid,
-        errorText: 'lastnamefielderror'.i18n());
+        isValid: _isLastNameValid, errorText: 'lastnamefielderror'.i18n());
   }
 
   Widget _renderInfoText() {
-    return  Padding(
-      padding:const EdgeInsets.only(
+    return Padding(
+      padding: const EdgeInsets.only(
         top: 5,
       ),
       child: Text('infotext'.i18n()),
@@ -138,9 +121,9 @@ class _SignUpNameState extends State<SignUpName> {
       padding: const EdgeInsets.only(top: 1),
       child: Row(
         children: [
-           Text('privacypolicytext'.i18n()),
+          Text('privacypolicytext'.i18n()),
           _renderPrivacyPolicyButton(),
-           Text('afterprivacypolicytext'.i18n()),
+          Text('afterprivacypolicytext'.i18n()),
         ],
       ),
     );
@@ -149,9 +132,9 @@ class _SignUpNameState extends State<SignUpName> {
   Widget _renderPrivacyPolicyButton() {
     return GestureDetector(
       onTap: () {},
-      child:  Text(
+      child: Text(
         'privacypolicybuttontext'.i18n(),
-        style:const TextStyle(color: Colors.blueAccent),
+        style: const TextStyle(color: Colors.blueAccent),
       ),
     );
   }
@@ -160,7 +143,7 @@ class _SignUpNameState extends State<SignUpName> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text('servicetermstext'.i18n()),
+        Text('servicetermstext'.i18n()),
         _renderServiceTermsButton(),
       ],
     );
@@ -171,15 +154,34 @@ class _SignUpNameState extends State<SignUpName> {
       padding: const EdgeInsets.only(bottom: 100),
       child: GestureDetector(
         onTap: () {},
-        child:  Text(
-           'servicetermsbutton'.i18n(),
-          style:const TextStyle(color: Colors.blueAccent),
+        child: Text(
+          'servicetermsbutton'.i18n(),
+          style: const TextStyle(color: Colors.blueAccent),
         ),
       ),
     );
   }
 
   void _onPressNextButton() {
-    _bloc.add(NextButtonEvent());
+    final user =
+        User(name: _nameController.text, lastName: _lastNameController.text);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SignUpBirtDay(
+          user: user,
+        ),
+      ),
+    );
+  }
+}
+
+extension _BlocListener on _SignUpNameState {
+  void _signupNameListener(BuildContext context, SignUpNameState state) {
+    if (state is UpdateLastNameValid) {
+      _isLastNameValid = state.isLastNameValid;
+    }
+    if (state is UpdateNameValid) {
+      _isNameValid = state.isNameValid;
+    }
   }
 }

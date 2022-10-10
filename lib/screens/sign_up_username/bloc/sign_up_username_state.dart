@@ -9,8 +9,5 @@ class UpdateUsernameValid extends SignUpUsernameState {
   UpdateUsernameValid({required this.isUsernameValid});
 }
 
-class UpdateUserState extends SignUpUsernameState {
-  final String username;
-  UpdateUserState({required this.username});
-}
+class UpdateUserState extends SignUpUsernameState {}
 class UsernameIsBusy extends SignUpUsernameState{}

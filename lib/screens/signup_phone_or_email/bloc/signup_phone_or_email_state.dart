@@ -25,18 +25,5 @@ class SetCountriesState extends SignupPhoneOrEmailState{
    SetCountriesState({required this.countries, required this.selectedCountry});
 }
 
-class UpdateUserState extends SignupPhoneOrEmailState {
-  String emailorphonenumber;
-  UpdateUserState({required this.emailorphonenumber});
-}
 
-class UpdateScreen extends SignupPhoneOrEmailState{
-  bool visibility;
-  UpdateScreen({required this.visibility});
-}
-
-class SetSelectedCountryState extends SignupPhoneOrEmailState{
-  Country selectedCountry;
-  SetSelectedCountryState({required this.selectedCountry});
-}
 

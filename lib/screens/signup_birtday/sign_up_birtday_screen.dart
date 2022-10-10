@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:intl/intl.dart';
 import 'package:localization/localization.dart';
 import 'package:snapchat/components/models/user.dart';
@@ -10,13 +9,11 @@ import 'package:snapchat/components/widgets/back_button.dart';
 import 'package:snapchat/components/widgets/change_focus.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/next_button_screen.dart';
-
 import '../signup_phone_or_email/sign_up_phone_or_email.dart';
 import 'bloc/sign_up_birtday_bloc.dart';
 
 class SignUpBirtDay extends StatefulWidget {
   const SignUpBirtDay({required this.user, super.key});
-
 
   final User user;
   @override
@@ -24,16 +21,16 @@ class SignUpBirtDay extends StatefulWidget {
 }
 
 class _SignUpBirtDayState extends State<SignUpBirtDay> {
-  late final SignUpBirtdayBloc _bloc;
+  final SignUpBirtdayBloc _bloc = SignUpBirtdayBloc();
   bool _isValid = true;
-
   final now = DateTime.now();
-  String _selectDateText = DateFormat.yMMMMd().format(DateTime.now());
-
+  final _fieldController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+  
   @override
   void initState() {
-    _bloc = SignUpBirtdayBloc();
-    _bloc.add(SignUpBirtdayLoadEvent());
+    _selectedDate = DateTime(now.year - 16, now.month, now.day);
+    _fieldController.text=DateFormat.yMMMMd().format(_selectedDate);
     super.initState();
   }
 
@@ -42,60 +39,43 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<SignUpBirtdayBloc, SignUpBirtdayState>(
-        listener: (context, state) {
-          if (state is UpdateBirtdayValid) {
-            _isValid = state.birtdayValid;
-            _selectDateText = state.seleqtedDate;
-          }
-          if (state is UpdateUserState) {
-            widget.user.dateOfBirthday = state.birtday;
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => SignUpPhoneOrEmail(
-                      user: widget.user,)),
-            );
-          }
-          if (state is SetDateState) {
-            _selectDateText = state.birtdayText;
-          }
-        },
-        builder: (context, state) => _render()
-      ),
+          listener: _signUpBirtDayListner,
+          builder: (context, state) => _render()),
     );
   }
 
   Widget _render() {
-           return ChangeFocus(
-            child: Scaffold(
-              body: Stack(
-                children: [
-                  const BackButtonWidget(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, right: 40),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SingleChildScrollView(
-                        reverse: true,
-                        clipBehavior: Clip.none,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            _renderTitle(),
-                            _renderFieldTitle(),
-                            _renderBirtdayField(),
-                            _renderErrorTextWidget(),
-                            _renderNextButton(),
-                            _renderPicker(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+    return ChangeFocus(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            const BackButtonWidget(),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, right: 40),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SingleChildScrollView(
+                  reverse: true,
+                  clipBehavior: Clip.none,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _renderTitle(),
+                      _renderFieldTitle(),
+                      _renderBirtdayField(),
+                      _renderErrorTextWidget(),
+                      _renderNextButton(),
+                      _renderPicker(),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          );
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _renderTitle() {
@@ -117,17 +97,17 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
   }
 
   Widget _renderBirtdayField() {
-    final fieldText = TextEditingController(text: _selectDateText);
     return TextField(
       readOnly: true,
-      controller: fieldText,
+      controller: _fieldController,
     );
   }
 
   Widget _renderErrorTextWidget() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 170),
-      child: ErorrText(errorText: 'birthdayfielderror'.i18n(), isValid: _isValid),
+      child:
+          ErorrText(errorText: 'birthdayfielderror'.i18n(), isValid: _isValid),
     );
   }
 
@@ -136,7 +116,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
       alignment: Alignment.bottomCenter,
       child: NextButton(
         OnButtonTup: _onPressNextButton,
-        buttonText:  'nextbutton'.i18n(),
+        buttonText: 'nextbutton'.i18n(),
         isValid: _isValid,
       ),
     );
@@ -146,8 +126,11 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     return SizedBox(
       height: 250,
       child: CupertinoDatePicker(
-        onDateTimeChanged: (value) =>
-            _bloc.add(DatePickerEvent(SelectDate: value)),
+        onDateTimeChanged: (value) {
+          _bloc.add(DatePickerEvent(selectDate: value));
+          _fieldController.text = DateFormat.yMMMMd().format(value);
+          _selectedDate=value;
+        },
         mode: CupertinoDatePickerMode.date,
         initialDateTime: DateTime(now.year - 16, now.month, now.day),
         maximumDate: DateTime.now(),
@@ -156,6 +139,21 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
   }
 
   void _onPressNextButton() {
-    _bloc.add(NextButtonEvent());
+    widget.user.dateOfBirthday = _selectedDate;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => SignUpPhoneOrEmail(
+                user: widget.user,
+              )),
+    );
+  }
+}
+
+extension _BlocListener on _SignUpBirtDayState {
+  void _signUpBirtDayListner(BuildContext context, SignUpBirtdayState state) {
+    if (state is UpdateBirtdayValid) {
+      _isValid = state.birtdayValid;
+    
+    }
   }
 }

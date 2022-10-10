@@ -8,11 +8,11 @@ class UpdatePassValid extends SignUpPassWordState {
   UpdatePassValid({required this.isPassValid});
 }
 
-class UpdateUserState extends SignUpPassWordState {
+/* class UpdateUserState extends SignUpPassWordState {
   final String password;
   UpdateUserState({required this.password});
-}
-class HidePassState extends SignUpPassWordState{
+} */
+/* class HidePassState extends SignUpPassWordState{
   final bool passIsHide;
   HidePassState({required this.passIsHide});
-}
+} */

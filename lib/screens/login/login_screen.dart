@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
-//import 'package:flutter_gen/gen_l10n/snapchat_localization.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
-
 
 import '../user/user_screen.dart';
 import 'bloc/login_bloc.dart';
@@ -17,41 +15,38 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInState extends State<LogInScreen> {
-  bool _visibility = true,
-      _usernameAndPassIsValid = true,
-      _isPassValid = false,
-      _isUsernameValid = false;
+  bool _visibility = true;
+  bool _isPassValid = false;
+  bool _isUsernameValid = false;
+  final _userNameController = TextEditingController();
+  final _passController = TextEditingController();
   final _bloc = LoginBloc();
-
-  @override
-  void initState() {
-    _bloc.add(LoginScrenLoadEvent());
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _bloc,
-      child: BlocConsumer<LoginBloc, LoginState>(
+      child: BlocListener<LoginBloc, LoginState>(
         listener: _loginBlocListener,
-        builder: (context, state) {
-          return ScreenSample(
-            buttonText: 'loginbutton'.i18n(),
-            isvalid: _isPassValid && _isUsernameValid,
-            onPressNextButton: _onPressNextButton,
-            children: [
-              _renderTitle(),
-              _renderUsernameTitle(),
-              _renderLogInUserneame(),
-              _renderUsernameErrorText(),
-              _renderPassTitle(),
-              _renderLogInPassword(),
-              _renderPassErrorText(),
-              _renderForgotPasswordButton(),
-            ],
-          );
-        },
+        child: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            return ScreenSample(
+              buttonText: 'loginbutton'.i18n(),
+              isvalid: _isPassValid && _isUsernameValid,
+              onPressNextButton: _onPressNextButton,
+              children: [
+                _renderTitle(),
+                _renderUsernameTitle(),
+                _renderLogInUserneame(),
+                _renderUsernameErrorText(),
+                _renderPassTitle(),
+                _renderLogInPassword(),
+                _renderPassErrorText(),
+                _renderForgotPasswordButton(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -61,7 +56,7 @@ class _LogInState extends State<LogInScreen> {
       padding: const EdgeInsets.only(top: 70),
       child: Center(
         child: Text(
-        'logintitle'.i18n(),
+          'logintitle'.i18n(),
           style: TitleStyle,
         ),
       ),
@@ -71,13 +66,13 @@ class _LogInState extends State<LogInScreen> {
   Widget _renderUsernameTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 30),
-      child: Text('loginfieldtitle'.i18n(),
-          style: FieldTitleStyle),
+      child: Text('loginfieldtitle'.i18n(), style: FieldTitleStyle),
     );
   }
 
   Widget _renderLogInUserneame() {
     return TextField(
+      controller: _userNameController,
       autofocus: true,
       onChanged: (value) => _bloc.add(NameFieldEvent(userName: value)),
     );
@@ -85,8 +80,7 @@ class _LogInState extends State<LogInScreen> {
 
   Widget _renderUsernameErrorText() {
     return ErorrText(
-        isValid: _isUsernameValid,
-        errorText:'loginfielderror'.i18n());
+        isValid: _isUsernameValid, errorText: 'loginfielderror'.i18n());
   }
 
   Widget _renderPassTitle() {
@@ -101,6 +95,7 @@ class _LogInState extends State<LogInScreen> {
 
   Widget _renderLogInPassword() {
     return TextField(
+      controller: _passController,
       onChanged: (value) => _bloc.add(PassFieldEvent(pass: value)),
       obscureText: _visibility,
       decoration: InputDecoration(
@@ -112,7 +107,9 @@ class _LogInState extends State<LogInScreen> {
   Widget _renderObscureButton() {
     return IconButton(
       onPressed: () {
-        _bloc.add(ObscureButtonEvent(passIsObscured: _visibility));
+        setState(() {
+          _visibility = !_visibility;
+        });
       },
       icon: Icon(_visibility
           ? Icons.visibility_off_sharp
@@ -122,12 +119,8 @@ class _LogInState extends State<LogInScreen> {
 
   Widget _renderPassErrorText() {
     return ErorrText(
-        isValid: _isPassValid && _usernameAndPassIsValid,
-        errorText: _usernameAndPassIsValid
-            ? 'loginfieldpasserror'.i18n()
-            :'loginerror'.i18n());
+        isValid: _isPassValid, errorText: 'loginfieldpasserror'.i18n());
   }
-
 
   Widget _renderForgotPasswordButton() {
     return Padding(
@@ -141,34 +134,48 @@ class _LogInState extends State<LogInScreen> {
     );
   }
 
+  Future<void> _showErroeMsg(String ErrorMsg) async {
+    return showDialog<void>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(' $ErrorMsg'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _onPressNextButton() {
-    _bloc.add(NextButtonEvent());
+    _bloc.add(NextButtonEvent(
+        passController: _passController,
+        userNameController: _userNameController));
   }
 }
 
 extension _BlocListener on _LogInState {
   void _loginBlocListener(BuildContext context, LoginState state) {
-         if (state is UpdateNameValid) {
-            _isUsernameValid = state.isUserNameValid;
-          }
-          if (state is UpdatePassValid) {
-            _usernameAndPassIsValid=true;
-            _isPassValid = state.IsPassValid;
-          }
-          if (state is PassObscureState) {
-            _visibility = state.passIsObscured;
-          }
-          if (state is UserNameOrPassIsNotValid) {
-            _usernameAndPassIsValid = false;
-          }
-          if (state is UserNameAndPassValidState) {
-            _usernameAndPassIsValid = true;
-            if (_usernameAndPassIsValid) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => UserScreen(user: state.loginUser)),
-              );
-            }
-          }
+    if (state is UpdateNameValid) {
+      _isUsernameValid = state.isUserNameValid;
+    }
+    if (state is UpdatePassValid) {
+      _isPassValid = state.IsPassValid;
+    }
+    if (state is UserNameOrPassIsNotValid) {
+      _showErroeMsg('loginerror'.i18n());
+    }
+    if (state is UserNameAndPassValidState) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => UserScreen(user: state.loginUser)));
+    }
   }
 }
