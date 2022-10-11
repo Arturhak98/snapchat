@@ -4,6 +4,7 @@ import 'package:localization/localization.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
+import 'package:snapchat/middle_wares/validation_repository.dart';
 
 import '../user/user_screen.dart';
 import 'bloc/login_bloc.dart';
@@ -20,7 +21,7 @@ class _LogInState extends State<LogInScreen> {
   bool _isUsernameValid = false;
   final _userNameController = TextEditingController();
   final _passController = TextEditingController();
-  final _bloc = LoginBloc();
+  final _bloc = LoginBloc(validation: ValidationRepository());
 
   @override
   Widget build(BuildContext context) {

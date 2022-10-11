@@ -6,6 +6,7 @@ import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
 import 'package:snapchat/middle_wares/database.dart';
+import 'package:snapchat/middle_wares/validation_repository.dart';
 
 import 'bloc/sign_up_pass_word_bloc.dart';
 
@@ -21,7 +22,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   final _passController = TextEditingController();
   bool _isValid = false;
   bool _hidePass = false;
-  final SignUpPassWordBloc _bloc = SignUpPassWordBloc();
+  final SignUpPassWordBloc _bloc = SignUpPassWordBloc(validation: ValidationRepository());
 
   @override
   Widget build(BuildContext context) {

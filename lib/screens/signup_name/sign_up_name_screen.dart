@@ -5,6 +5,7 @@ import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
+import 'package:snapchat/middle_wares/validation_repository.dart';
 import '../signup_birtday/sign_up_birtday_screen.dart';
 import 'bloc/sign_up_name_block.dart';
 
@@ -15,7 +16,7 @@ class SignUpName extends StatefulWidget {
 }
 
 class _SignUpNameState extends State<SignUpName> {
-  final SignUpNameBloc _bloc = SignUpNameBloc();
+  final SignUpNameBloc _bloc = SignUpNameBloc(validation: ValidationRepository());
   bool _isNameValid = false;
   bool _isLastNameValid = false;
   final _lastNameController = TextEditingController();
