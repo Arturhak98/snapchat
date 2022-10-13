@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:snapchat/components/models/country_code.dart';
-import 'package:snapchat/middle_wares/sql_database_repository.dart';
+import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
 part 'country_code_event.dart';
 part 'country_code_state.dart';
 

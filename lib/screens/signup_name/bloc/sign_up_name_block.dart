@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:snapchat/middle_wares/validation_repository.dart';
+import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 part 'sign_up_name_event.dart';
 part 'sign_up_name_state.dart';
 

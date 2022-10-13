@@ -1,4 +1,4 @@
-import 'package:snapchat/middle_wares/api_repository.dart';
+import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CountriesDataBase {

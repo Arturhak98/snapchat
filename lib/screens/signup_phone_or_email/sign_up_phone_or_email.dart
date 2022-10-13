@@ -7,9 +7,9 @@ import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
-import 'package:snapchat/middle_wares/api_repository.dart';
-import 'package:snapchat/middle_wares/sql_database_repository.dart';
-import 'package:snapchat/middle_wares/validation_repository.dart';
+import 'package:snapchat/middle_wares/repositories/api_repository.dart';
+import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
+import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 
 import '../country_code/country_code_screen.dart';
 import '../sign_up_username/sign_up_username_screen.dart';

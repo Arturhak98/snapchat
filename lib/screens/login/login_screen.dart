@@ -4,8 +4,8 @@ import 'package:localization/localization.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
-import 'package:snapchat/middle_wares/sql_database_repository.dart';
-import 'package:snapchat/middle_wares/validation_repository.dart';
+import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
+import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 
 import '../user/user_screen.dart';
 import 'bloc/login_bloc.dart';

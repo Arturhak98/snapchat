@@ -9,7 +9,7 @@ import 'package:snapchat/components/widgets/back_button.dart';
 import 'package:snapchat/components/widgets/change_focus.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/next_button_screen.dart';
-import 'package:snapchat/middle_wares/validation_repository.dart';
+import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 import '../signup_phone_or_email/sign_up_phone_or_email.dart';
 import 'bloc/sign_up_birtday_bloc.dart';
 

@@ -1,7 +1,7 @@
 import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/components/models/user.dart';
-import 'package:snapchat/middle_wares/countriesdatabase.dart';
-import 'package:snapchat/middle_wares/usersdatabase.dart';
+import 'package:snapchat/middle_wares/databases/countriesdatabase.dart';
+import 'package:snapchat/middle_wares/databases/usersdatabase.dart';
 
 class SqlDatabaseRepository {
   final userdb = UsersDataBase();

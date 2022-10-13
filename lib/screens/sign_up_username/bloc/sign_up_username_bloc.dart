@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:snapchat/middle_wares/sql_database_repository.dart';
-import 'package:snapchat/middle_wares/validation_repository.dart';
+import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
+import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 part 'sign_up_username_event.dart';
 part 'sign_up_username_state.dart';
 
