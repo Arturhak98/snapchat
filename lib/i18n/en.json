@@ -52,7 +52,9 @@
     "passfilederror":"PASSWORD length must be greater than 7",
     "hide":"Hide",
 
-    "nextbutton":"Continue"
+    "nextbutton":"Continue",
+    "search":"search"
+
 
 
 }

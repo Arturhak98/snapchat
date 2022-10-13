@@ -5,7 +5,7 @@ import 'package:snapchat/middle_wares/usersdatabase.dart';
 
 class SqlDatabaseRepository {
   final userdb = UsersDataBase();
-  final countiesdb = CountriesDataBase();
+  final countriesdb = CountriesDataBase();
 
   Future<User?> getUser(String username, String password) async {
     await userdb.init();
@@ -36,8 +36,8 @@ class SqlDatabaseRepository {
   }
 
   Future<List<Country>> getCountries(String query) async {
-    await countiesdb.init();
-    final countriesMap = await countiesdb.countriesdb!.rawQuery(
+    await countriesdb.init();
+    final countriesMap = await countriesdb.countriesdb!.rawQuery(
       "SELECT * FROM countriesdb WHERE CountryName LIKE '%$query%' OR CountryCodeString LIKE '%$query%' OR CountryCode LIKE '%$query%'",
     );
     final countries = <Country>[];

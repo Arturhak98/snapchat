@@ -7,13 +7,13 @@ import 'package:snapchat/components/widgets/change_focus.dart';
 import 'bloc/country_code_bloc.dart';
 
 class CountryCode extends StatefulWidget {
-  CountryCode({
+ const CountryCode({
     required this.OnCountryChanged,
     required this.countries,
     super.key,
   });
   final Function(Country country) OnCountryChanged;
-  List<Country> countries;
+  final List<Country> countries;
 
   @override
   State<CountryCode> createState() => _CountryCodeState();
@@ -141,7 +141,8 @@ extension _CountryBlocListner on _CountryCodeState {
       Navigator.pop(context);
     }
     if (state is SearchCountriesState) {
-      widget.countries = state.filtredCountries;
+      widget.countries.clear();
+      widget.countries.addAll(state.filtredCountries);
     }
   }
 }

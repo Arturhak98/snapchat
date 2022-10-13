@@ -249,7 +249,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   }
 
   void _onPressPhoneNextButton() {
-    widget.user.emailOrPhoneNumber = _phoneController.text;
+    widget.user.emailOrPhoneNumber =selectedCountry.CountryCode+_phoneController.text;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SignUpUserName(

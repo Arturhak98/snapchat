@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 final TitleStyle = const TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
@@ -15,6 +16,6 @@ final SearchFieldBorderStyle = InputDecoration(
     borderSide: const BorderSide(width: 1, color: Colors.grey),
   ),
   prefixIcon: const Icon(Icons.search),
-  labelText: 'Search',
+  labelText: 'search'.i18n(),
   labelStyle: const TextStyle(fontSize: 15),
 );
