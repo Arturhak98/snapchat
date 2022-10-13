@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:snapchat/components/models/user.dart';
-import 'package:snapchat/middle_wares/database.dart';
+import 'package:snapchat/middle_wares/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/validation_repository.dart';
 
 part 'login_event.dart';
@@ -16,16 +15,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit) async {
-    final query = await DataBase.getUser(event.userNameController.text);
-    if (query.isNotEmpty) {
-      final user = User.fromMap(query.first);
-      if (user.password == event.passController.text) {
-        emit(UserNameAndPassValidState(loginUser: user));
-      } else {
-        emit(UserNameOrPassIsNotValid());
-      }
-    } else {
+    final sqldb = SqlDatabaseRepository();
+    final user= await sqldb.getUser(event.userName, event.password);
+    if (user == null) {
       emit(UserNameOrPassIsNotValid());
+    } else {
+      emit(UserNameAndPassValidState(loginUser: user));
     }
   }
 

@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:snapchat/middle_wares/database.dart';
+import 'package:snapchat/middle_wares/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/validation_repository.dart';
 part 'sign_up_username_event.dart';
 part 'sign_up_username_state.dart';
@@ -14,8 +14,9 @@ class SignUpUsernameBloc
   }
 
   Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit) async {
-    final query = await DataBase.getUser(event.userName);
-    if (query.isNotEmpty) {
+    final sqldb=SqlDatabaseRepository();
+    final busy = await sqldb.getUserName(event.userName);
+    if (busy) {
       emit(UsernameIsBusy());
     } else {
       emit(UpdateUserState());

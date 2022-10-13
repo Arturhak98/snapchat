@@ -3,10 +3,10 @@ part of 'login_bloc.dart';
 abstract class LoginEvent {}
 
 class NextButtonEvent extends LoginEvent {
-  TextEditingController passController;
-  TextEditingController userNameController;
+  String password;
+  String userName;
   NextButtonEvent(
-      {required this.passController, required this.userNameController});
+      {required this.password, required this.userName});
 }
 
 class NameFieldEvent extends LoginEvent {

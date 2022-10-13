@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/middle_wares/api_repository.dart';
+import 'package:snapchat/middle_wares/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/validation_repository.dart';
 part 'signup_phone_or_email_bloc_event.dart';
 part 'signup_phone_or_email_state.dart';
@@ -26,8 +27,9 @@ class SignupPhoneOrEmailBloc
 
   Future<void> _onSignUpPhoneLoadEvent(
       SignUpPhoneLoadEvent event, Emitter emit) async {
+    final sqlrepository = SqlDatabaseRepository();
     final api = ApiRepository();
-    final countries = await api.loadJsonData(emit);
+    final countries = await sqlrepository.getCountries('');
     emit(SetCountriesState(
         countries: countries,
         selectedCountry: await api.selectUserCountry(emit, countries)));

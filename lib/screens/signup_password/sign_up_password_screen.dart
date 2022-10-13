@@ -5,7 +5,7 @@ import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
-import 'package:snapchat/middle_wares/database.dart';
+import 'package:snapchat/middle_wares/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/validation_repository.dart';
 
 import 'bloc/sign_up_pass_word_bloc.dart';
@@ -109,8 +109,9 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   }
 
   void _onPressPhoneNextButton() {
+    final sqldb=SqlDatabaseRepository();
     widget.user.password = _passController.text;
-    DataBase.insert(widget.user);
+    sqldb.insert(widget.user);
     Navigator.popUntil(context, (route) => !Navigator.canPop(context));
   }
 }

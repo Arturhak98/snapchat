@@ -1,22 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-import 'package:snapchat/middle_wares/database.dart';
 import 'package:snapchat/screens/signup_name/sign_up_name_screen.dart';
 import '../login/login_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
  const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-@override
-  void initState() {
-    DataBase.init();
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

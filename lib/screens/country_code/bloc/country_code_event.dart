@@ -4,7 +4,6 @@ abstract class CountryCodeEvent {}
 
 class SearchFieldEvent extends CountryCodeEvent {
   String query;
-  List<Country> countries;
-  SearchFieldEvent({required this.query,required this.countries});
+  SearchFieldEvent({required this.query});
 }
  

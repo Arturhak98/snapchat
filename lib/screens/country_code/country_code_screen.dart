@@ -7,25 +7,25 @@ import 'package:snapchat/components/widgets/change_focus.dart';
 import 'bloc/country_code_bloc.dart';
 
 class CountryCode extends StatefulWidget {
-  const CountryCode({
+  CountryCode({
     required this.OnCountryChanged,
     required this.countries,
     super.key,
   });
   final Function(Country country) OnCountryChanged;
-  final countries;
+  List<Country> countries;
 
   @override
   State<CountryCode> createState() => _CountryCodeState();
 }
 
 class _CountryCodeState extends State<CountryCode> {
-  var _filtredCountres = <Country>[];
+  // var _filtredCountres = <Country>[];
   final CountryCodeBloc _bloc = CountryCodeBloc();
 
   @override
   void initState() {
-    _filtredCountres = widget.countries;
+    // _filtredCountres = widget.countries;
     super.initState();
   }
 
@@ -72,8 +72,7 @@ class _CountryCodeState extends State<CountryCode> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: TextField(
-        onChanged: (value) => _bloc
-            .add(SearchFieldEvent(query: value, countries: widget.countries)),
+        onChanged: (value) => _bloc.add(SearchFieldEvent(query: value)),
         decoration: SearchFieldBorderStyle,
       ),
     );
@@ -84,7 +83,7 @@ class _CountryCodeState extends State<CountryCode> {
       child: SizedBox(
         child: ListView.builder(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          itemCount: _filtredCountres.length,
+          itemCount: widget.countries.length,
           itemBuilder: (BuildContext context, int index) {
             return _renderListViewElement(index);
           },
@@ -96,7 +95,7 @@ class _CountryCodeState extends State<CountryCode> {
   Widget _renderListViewElement(int index) {
     return GestureDetector(
       onTap: () => {
-        widget.OnCountryChanged(_filtredCountres[index]),
+        widget.OnCountryChanged(widget.countries[index]),
         Navigator.pop(context),
       },
       child: Column(
@@ -105,7 +104,7 @@ class _CountryCodeState extends State<CountryCode> {
             children: [
               _renderFlagToString(index),
               Text(
-                _filtredCountres[index].CountryCode,
+                widget.countries[index].CountryCode,
                 style: const TextStyle(fontSize: 20),
               )
             ],
@@ -121,13 +120,13 @@ class _CountryCodeState extends State<CountryCode> {
   Widget _renderFlagToString(int index) {
     return Expanded(
       child: Text(
-        _filtredCountres[index].CountryCodeString.replaceAllMapped(
-                  RegExp(r'[A-Z]'),
-                  (match) => String.fromCharCode(
-                      match.group(0)!.codeUnitAt(0) + 127397),
-                ) +
+        widget.countries[index].CountryCodeString.replaceAllMapped(
+              RegExp(r'[A-Z]'),
+              (match) =>
+                  String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397),
+            ) +
             ' ' +
-            _filtredCountres[index].CountryName,
+            widget.countries[index].CountryName,
         style: const TextStyle(fontSize: 20),
       ),
     );
@@ -142,7 +141,7 @@ extension _CountryBlocListner on _CountryCodeState {
       Navigator.pop(context);
     }
     if (state is SearchCountriesState) {
-      _filtredCountres = state.filtredCountries;
+      widget.countries = state.filtredCountries;
     }
   }
 }

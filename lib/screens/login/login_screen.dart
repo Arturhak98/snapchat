@@ -158,8 +158,8 @@ class _LogInState extends State<LogInScreen> {
 
   void _onPressNextButton() {
     _bloc.add(NextButtonEvent(
-        passController: _passController,
-        userNameController: _userNameController));
+        password: _passController.text,
+        userName: _userNameController.text));
   }
 }
 

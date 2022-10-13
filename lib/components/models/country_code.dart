@@ -12,4 +12,20 @@ class Country {
       CountryCodeString: json['iso2_cc'] as String
     );
   }
+    Map<String, dynamic> toMap() {
+    final map = {
+      'CountryName': CountryName,
+      'CountryCode': CountryCode,
+      'CountryCodeString': CountryCodeString,
+    };
+    return map;
+  }
+
+  factory Country.fromMap(Map<String, dynamic> country) {
+    return Country(
+     CountryName: country['CountryName'] as String,
+      CountryCode: country['CountryCode'].toString(),
+      CountryCodeString: country['CountryCodeString'] as String
+    );
+  }
 }

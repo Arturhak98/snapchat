@@ -9,7 +9,7 @@ import 'package:snapchat/screens/signup_phone_or_email/bloc/signup_phone_or_emai
 
 class ApiRepository{
 
-  Future<List<Country>> loadJsonData(Emitter emit) async {
+/*   Future<List<Country>> loadJsonData(Emitter emit) async {
     try {
       final jsonText = await http
           .get(Uri.parse('https://parentstree-server.herokuapp.com/countries'));
@@ -22,6 +22,22 @@ class ApiRepository{
       }
     } on SocketException catch (_) {
       emit(ShowErrorAlertState(erorrMsg: 'No internet'));
+    }
+    throw {};
+  } */
+   Future<List<Country>> loadJsonData() async {
+    try {
+      final jsonText = await http
+          .get(Uri.parse('https://parentstree-server.herokuapp.com/countries'));
+      if (jsonText.statusCode == 200) {
+        final data = json.decode(jsonText.body) as Map<String, dynamic>;
+        final countries = Countries.fromJson(data);
+        return countries.countries;
+      } else {
+        
+      }
+    } on SocketException catch (_) {
+      
     }
     throw {};
   }
