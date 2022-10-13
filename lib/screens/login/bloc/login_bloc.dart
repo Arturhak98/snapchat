@@ -7,15 +7,16 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  ValidationRepository validation;
-  LoginBloc({required this.validation}) : super(LoginInitial()) {
+  final ValidationRepository validation;
+final SqlDatabaseRepository sqldb ;
+
+  LoginBloc({required this.validation ,required this.sqldb}) : super(LoginInitial()) {
     on<NameFieldEvent>(_onNameFieldEvent);
     on<PassFieldEvent>(_onPassFieldEvent);
     on<NextButtonEvent>(_onNextButtonEvent);
   }
 
   Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit) async {
-    final sqldb = SqlDatabaseRepository();
     final user= await sqldb.getUser(event.userName, event.password);
     if (user == null) {
       emit(UserNameOrPassIsNotValid());

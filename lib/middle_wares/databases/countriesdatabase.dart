@@ -29,6 +29,6 @@ class CountriesDataBase {
 
   Future<void> onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE countriesdb (CountryCodeString STRING , CountryCode STRING,CountryName STRING)');
+        'CREATE TABLE countriesdb (CodeString STRING , Code STRING,Name STRING)');
   }
 }

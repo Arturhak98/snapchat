@@ -17,7 +17,9 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       body: Center(
         child: Text(
-          'Name:${user.name}\nLastName:${user.lastName}\nDateOfBirth:${user.dateOfBirthday}\nUserName:${user.userName}\nPhoneOrEmail:${user.emailOrPhoneNumber}\nPassword:${user.password}\n',
+          'Name:${user.name}\nLastName:${user.lastName}' 
+          '\nDateOfBirth:${user.dateOfBirthday}\nUserName:${user.userName}'
+          '\nPhoneOrEmail:${user.emailOrPhoneNumber}\nPassword:${user.password}\n',
           style: const TextStyle(fontSize: 20),
         ),
       ),

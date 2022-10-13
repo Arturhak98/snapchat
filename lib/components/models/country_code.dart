@@ -14,18 +14,18 @@ class Country {
   }
     Map<String, dynamic> toMap() {
     final map = {
-      'CountryName': CountryName,
-      'CountryCode': CountryCode,
-      'CountryCodeString': CountryCodeString,
+      'Name': CountryName,
+      'Code': CountryCode,
+      'CodeString': CountryCodeString,
     };
     return map;
   }
 
   factory Country.fromMap(Map<String, dynamic> country) {
     return Country(
-     CountryName: country['CountryName'] as String,
-      CountryCode: country['CountryCode'].toString(),
-      CountryCodeString: country['CountryCodeString'] as String
+     CountryName: country['Name'] as String,
+      CountryCode: country['Code'].toString(),
+      CountryCodeString: country['CodeString'] as String
     );
   }
 }

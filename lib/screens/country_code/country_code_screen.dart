@@ -20,12 +20,10 @@ class CountryCode extends StatefulWidget {
 }
 
 class _CountryCodeState extends State<CountryCode> {
-  // var _filtredCountres = <Country>[];
   final CountryCodeBloc _bloc = CountryCodeBloc();
 
   @override
   void initState() {
-    // _filtredCountres = widget.countries;
     super.initState();
   }
 

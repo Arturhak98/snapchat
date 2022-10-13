@@ -6,15 +6,15 @@ part 'sign_up_username_state.dart';
 
 class SignUpUsernameBloc
     extends Bloc<SignUpUsernameEvent, SignUpUsernameState> {
-  ValidationRepository validation;
-  SignUpUsernameBloc({required this.validation})
+  final ValidationRepository validation;
+   final SqlDatabaseRepository sqldb;
+  SignUpUsernameBloc({required this.validation,required this.sqldb})
       : super(SignUpUsernameInitial()) {
     on<UsernameFieldEvent>(_onUsernameFieldEvent);
     on<NextButtonEvent>(_onNextButtonEvent);
   }
 
   Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit) async {
-    final sqldb=SqlDatabaseRepository();
     final busy = await sqldb.getUserName(event.userName);
     if (busy) {
       emit(UsernameIsBusy());

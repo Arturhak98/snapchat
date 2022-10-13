@@ -12,7 +12,3 @@ class UpdateLastNameValid extends SignUpNameState {
   UpdateLastNameValid({required this.isLastNameValid});
 }
 
-/* class UpdateUserState extends SignUpNameState{
-  final String name, lastName ;
-  UpdateUserState({required this.name,required this.lastName});
-} */

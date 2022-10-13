@@ -8,8 +8,10 @@ part 'signup_phone_or_email_state.dart';
 
 class SignupPhoneOrEmailBloc
     extends Bloc<SignupPhoneOrEmailEvent, SignupPhoneOrEmailState> {
-  ValidationRepository validation;
-  SignupPhoneOrEmailBloc({required this.validation})
+ final ValidationRepository validation;
+ final SqlDatabaseRepository sqlrepository ;
+ final ApiRepository api;
+  SignupPhoneOrEmailBloc({required this.validation,required this.api,required this.sqlrepository})
       : super(SignupPhoneOrEmailBlocInitial()) {
     on<SignUpPhoneLoadEvent>(_onSignUpPhoneLoadEvent);
     on<NumberFieldEvent>(_onNumberFieldEvent);
@@ -27,11 +29,13 @@ class SignupPhoneOrEmailBloc
 
   Future<void> _onSignUpPhoneLoadEvent(
       SignUpPhoneLoadEvent event, Emitter emit) async {
-    final sqlrepository = SqlDatabaseRepository();
-    final api = ApiRepository();
-    final countries = await sqlrepository.getCountries('');
+        try{
+    final countries = await sqlrepository.getCountries('',);
     emit(SetCountriesState(
         countries: countries,
-        selectedCountry: await api.selectUserCountry(emit, countries)));
+        selectedCountry: await api.selectUserCountry( countries)));}
+        catch(e){
+          emit(ShowErrorAlertState(erorrMsg: e.toString()));
+        }
   }
 }

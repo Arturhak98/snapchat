@@ -7,6 +7,8 @@ import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
+import 'package:snapchat/middle_wares/api_repository.dart';
+import 'package:snapchat/middle_wares/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/validation_repository.dart';
 
 import '../country_code/country_code_screen.dart';
@@ -35,7 +37,11 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   final _phoneController = TextEditingController();
   final _emailContrroler = TextEditingController();
   var _countries = <Country>[];
-  final SignupPhoneOrEmailBloc _bloc = SignupPhoneOrEmailBloc(validation: ValidationRepository());
+  final SignupPhoneOrEmailBloc _bloc = SignupPhoneOrEmailBloc(
+    validation: ValidationRepository(),
+    api: ApiRepository(),
+    sqlrepository: SqlDatabaseRepository(),
+  );
 
   @override
   void initState() {
@@ -249,7 +255,8 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   }
 
   void _onPressPhoneNextButton() {
-    widget.user.emailOrPhoneNumber =selectedCountry.CountryCode+_phoneController.text;
+    widget.user.emailOrPhoneNumber =
+        selectedCountry.CountryCode + _phoneController.text;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SignUpUserName(

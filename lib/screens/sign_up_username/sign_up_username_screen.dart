@@ -5,6 +5,7 @@ import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
+import 'package:snapchat/middle_wares/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/validation_repository.dart';
 import '../signup_password/sign_up_password_screen.dart';
 import 'bloc/sign_up_username_bloc.dart';
@@ -21,7 +22,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
   bool _isValid = false;
   bool _usernameIsBusy = true;
   final _usernameController = TextEditingController();
-  late final SignUpUsernameBloc _bloc = SignUpUsernameBloc(validation: ValidationRepository());
+  late final SignUpUsernameBloc _bloc = SignUpUsernameBloc(validation: ValidationRepository(),sqldb: SqlDatabaseRepository());
 
   @override
   Widget build(BuildContext context) {

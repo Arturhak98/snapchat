@@ -38,7 +38,10 @@ class SqlDatabaseRepository {
   Future<List<Country>> getCountries(String query) async {
     await countriesdb.init();
     final countriesMap = await countriesdb.countriesdb!.rawQuery(
-      "SELECT * FROM countriesdb WHERE CountryName LIKE '%$query%' OR CountryCodeString LIKE '%$query%' OR CountryCode LIKE '%$query%'",
+      'SELECT * FROM countriesdb'
+      " WHERE Name LIKE '%$query%'"
+      " OR CodeString LIKE '%$query%'"
+      " OR Code LIKE '%$query%'",
     );
     final countries = <Country>[];
     countriesMap.forEach((countryMap) {
