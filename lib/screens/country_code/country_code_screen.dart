@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:snapchat/components/models/country_code.dart';
+import 'package:snapchat/components/models/country_notifier.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/back_button.dart';
 import 'package:snapchat/components/widgets/change_focus.dart';
 import 'bloc/country_code_bloc.dart';
 
 class CountryCode extends StatefulWidget {
- const CountryCode({
-    required this.OnCountryChanged,
+  const CountryCode({
     required this.countries,
     super.key,
   });
-  final Function(Country country) OnCountryChanged;
   final List<Country> countries;
 
   @override
@@ -21,11 +21,6 @@ class CountryCode extends StatefulWidget {
 
 class _CountryCodeState extends State<CountryCode> {
   final CountryCodeBloc _bloc = CountryCodeBloc();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +86,10 @@ class _CountryCodeState extends State<CountryCode> {
   }
 
   Widget _renderListViewElement(int index) {
+    final value = Provider.of<CountryNotifier>(context, listen: false);
     return GestureDetector(
       onTap: () => {
-        widget.OnCountryChanged(widget.countries[index]),
+        value.changeCountry(widget.countries[index]),
         Navigator.pop(context),
       },
       child: Column(
@@ -133,11 +129,6 @@ class _CountryCodeState extends State<CountryCode> {
 
 extension _CountryBlocListner on _CountryCodeState {
   void _countryBlocListner(BuildContext context, CountryCodeState state) {
-    if (state is SelectCountryState) {
-      widget.OnCountryChanged(state.selectedCountry);
-      FocusManager.instance.primaryFocus?.unfocus();
-      Navigator.pop(context);
-    }
     if (state is SearchCountriesState) {
       widget.countries.clear();
       widget.countries.addAll(state.filtredCountries);

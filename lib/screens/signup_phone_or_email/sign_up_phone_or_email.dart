@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
+import 'package:provider/provider.dart';
 import 'package:snapchat/components/models/country_code.dart';
+import 'package:snapchat/components/models/country_notifier.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
@@ -22,14 +24,11 @@ class SignUpPhoneOrEmail extends StatefulWidget {
   });
 
   final User user;
-
   @override
   State<SignUpPhoneOrEmail> createState() => _SignUpPhoneOrEmailState();
 }
 
 class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
-  Country selectedCountry =
-      Country(CountryCode: '', CountryName: '', CountryCodeString: '');
   bool _visibility = true;
   bool _validEmail = false;
   bool _validNumber = false;
@@ -140,32 +139,31 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   }
 
   Widget _renderFieldButton() {
+    final value = Provider.of<CountryNotifier>(context,);
     return TextButton(
-      onPressed: _countriesLoaded
-          ? () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CountryCode(
-                    OnCountryChanged: ChangeCountry,
-                    countries: _countries,
-                  ),
-                ),
-              );
-            }
-          : null,
-      child: _countriesLoaded
-          ? Text(
-              selectedCountry.CountryCodeString.replaceAllMapped(
-                    RegExp(r'[A-Z]'),
-                    (match) => String.fromCharCode(
-                        match.group(0)!.codeUnitAt(0) + 127397),
-                  ) +
-                  ' +' +
-                  selectedCountry.CountryCode,
-              style: const TextStyle(fontSize: 20),
-            )
-          : Text('loading'.i18n(), style: const TextStyle(fontSize: 20)),
-    );
+        onPressed: _countriesLoaded
+            ? () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ChangeNotifierProvider.value(
+                      value: value,
+                      child: CountryCode(
+                        countries: _countries,
+                      )),
+                ));
+              }
+            : null,
+        child: _countriesLoaded
+            ? Text(
+                value.country.CountryCodeString.replaceAllMapped(
+                      RegExp(r'[A-Z]'),
+                      (match) => String.fromCharCode(
+                          match.group(0)!.codeUnitAt(0) + 127397),
+                    ) +
+                    ' +' +
+                    value.country.CountryCode,
+                style: const TextStyle(fontSize: 20),
+              )
+            : Text('loading'.i18n(), style: const TextStyle(fontSize: 20)));
   }
 
   Widget _renderErrorNumberTextWidget() {
@@ -256,7 +254,10 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
 
   void _onPressPhoneNextButton() {
     widget.user.emailOrPhoneNumber =
-        selectedCountry.CountryCode + _phoneController.text;
+        Provider.of<CountryNotifier>(context, listen: false)
+                .country
+                .CountryCode +
+            _phoneController.text;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SignUpUserName(
@@ -268,6 +269,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
 
   void _onPressEmailNextButton() {
     widget.user.emailOrPhoneNumber = _emailContrroler.text;
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SignUpUserName(
@@ -275,12 +277,6 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
         ),
       ),
     );
-  }
-
-  void ChangeCountry(Country country) {
-    setState(() {
-      selectedCountry = country;
-    });
   }
 }
 
@@ -298,7 +294,7 @@ extension _BlocListener on _SignUpPhoneOrEmailState {
     }
     if (state is SetCountriesState) {
       _countries = state.countries;
-      selectedCountry = state.selectedCountry;
+      context.read<CountryNotifier>().changeCountry(state.selectedCountry);
       _countriesLoaded = true;
     }
   }

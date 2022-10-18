@@ -1,10 +1,9 @@
-
-class Country {
-  final String CountryName;
-  final String CountryCode;
-  final String CountryCodeString;
+class Country  {
+   String CountryName;
+   String CountryCode;
+   String CountryCodeString;
   
-  Country({required this.CountryCode, required this.CountryName,required this.CountryCodeString});
+  Country({ this.CountryCode='', this.CountryName='',this.CountryCodeString=''});
   factory Country.fromJson(Map<String, dynamic> json) {
     return Country(
       CountryName: json['name'] as String,
@@ -28,4 +27,5 @@ class Country {
       CountryCodeString: country['CodeString'] as String
     );
   }
+
 }

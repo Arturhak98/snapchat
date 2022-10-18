@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:localization/localization.dart';
+import 'package:provider/provider.dart';
+import 'package:snapchat/components/models/country_notifier.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/back_button.dart';
@@ -22,16 +24,17 @@ class SignUpBirtDay extends StatefulWidget {
 }
 
 class _SignUpBirtDayState extends State<SignUpBirtDay> {
-  final SignUpBirtdayBloc _bloc = SignUpBirtdayBloc(validation: ValidationRepository());
+  final SignUpBirtdayBloc _bloc =
+      SignUpBirtdayBloc(validation: ValidationRepository());
   bool _isValid = true;
   final now = DateTime.now();
   final _fieldController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
-  
+
   @override
   void initState() {
     _selectedDate = DateTime(now.year - 16, now.month, now.day);
-    _fieldController.text=DateFormat.yMMMMd().format(_selectedDate);
+    _fieldController.text = DateFormat.yMMMMd().format(_selectedDate);
     super.initState();
   }
 
@@ -40,8 +43,9 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<SignUpBirtdayBloc, SignUpBirtdayState>(
-          listener: _signUpBirtDayListner,
-          builder: (context, state) => _render()),
+        listener: _signUpBirtDayListner,
+        builder: (context, state) => _render(),
+      ),
     );
   }
 
@@ -130,7 +134,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
         onDateTimeChanged: (value) {
           _bloc.add(DatePickerEvent(selectDate: value));
           _fieldController.text = DateFormat.yMMMMd().format(value);
-          _selectedDate=value;
+          _selectedDate = value;
         },
         mode: CupertinoDatePickerMode.date,
         initialDateTime: DateTime(now.year - 16, now.month, now.day),
@@ -143,9 +147,9 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     widget.user.dateOfBirthday = _selectedDate;
     Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => SignUpPhoneOrEmail(
+          builder: (context) => ChangeNotifierProvider(create:(context) =>  CountryNotifier(),child:SignUpPhoneOrEmail(
                 user: widget.user,
-              )),
+              ))),
     );
   }
 }
@@ -154,7 +158,6 @@ extension _BlocListener on _SignUpBirtDayState {
   void _signUpBirtDayListner(BuildContext context, SignUpBirtdayState state) {
     if (state is UpdateBirtdayValid) {
       _isValid = state.birtdayValid;
-    
     }
   }
 }

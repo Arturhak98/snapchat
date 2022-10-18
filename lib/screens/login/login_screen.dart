@@ -17,12 +17,14 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInState extends State<LogInScreen> {
-  bool _visibility = true;
+  final _visibilityNotifier = ValueNotifier<bool>(true);
+  // bool _visibility = true;
   bool _isPassValid = false;
   bool _isUsernameValid = false;
   final _userNameController = TextEditingController();
   final _passController = TextEditingController();
-  final _bloc = LoginBloc(validation: ValidationRepository(), sqldb: SqlDatabaseRepository());
+  final _bloc = LoginBloc(
+      validation: ValidationRepository(), sqldb: SqlDatabaseRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -96,26 +98,28 @@ class _LogInState extends State<LogInScreen> {
   }
 
   Widget _renderLogInPassword() {
-    return TextField(
-      controller: _passController,
-      onChanged: (value) => _bloc.add(PassFieldEvent(pass: value)),
-      obscureText: _visibility,
-      decoration: InputDecoration(
-        suffixIcon: _renderObscureButton(),
-      ),
-    );
+    return ValueListenableBuilder(
+        valueListenable: _visibilityNotifier,
+        builder: ((context, value, child) => TextField(
+              controller: _passController,
+              onChanged: (value) => _bloc.add(PassFieldEvent(pass: value)),
+              obscureText: value,
+              decoration: InputDecoration(
+                suffixIcon: _renderObscureButton(),
+              ),
+            )));
   }
 
   Widget _renderObscureButton() {
     return IconButton(
       onPressed: () {
-        setState(() {
-          _visibility = !_visibility;
-        });
+        _visibilityNotifier.value = !_visibilityNotifier.value;
       },
-      icon: Icon(_visibility
-          ? Icons.visibility_off_sharp
-          : Icons.remove_red_eye_sharp),
+      icon: ValueListenableBuilder(
+        valueListenable: _visibilityNotifier,
+        builder: ((context, value, child) => Icon(
+            value ? Icons.visibility_off_sharp : Icons.remove_red_eye_sharp)),
+      ),
     );
   }
 
@@ -159,8 +163,7 @@ class _LogInState extends State<LogInScreen> {
 
   void _onPressNextButton() {
     _bloc.add(NextButtonEvent(
-        password: _passController.text,
-        userName: _userNameController.text));
+        password: _passController.text, userName: _userNameController.text));
   }
 }
 
