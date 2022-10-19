@@ -1,4 +1,4 @@
-part of 'signup_phone_or_email_bloc_bloc.dart';
+part of 'signup_phone_or_email_bloc.dart';
 
 abstract class SignupPhoneOrEmailState {}
 
@@ -10,8 +10,8 @@ class UpdateEmailValid extends SignupPhoneOrEmailState {
 }
 
 class ShowErrorAlertState extends SignupPhoneOrEmailState{
-  String erorrMsg;
-  ShowErrorAlertState({required this.erorrMsg});
+  String errorMsg;
+  ShowErrorAlertState({required this.errorMsg});
 }
 
 class UpdatePhoneValid extends SignupPhoneOrEmailState {

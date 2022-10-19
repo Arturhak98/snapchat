@@ -83,7 +83,7 @@ class _SignUpNameState extends State<SignUpName> {
   }
 
   Widget _renderErrorTextName() {
-    return ErorrText(isValid: _isNameValid, errorText: 'namefielderror'.i18n());
+    return ErrorText(isValid: _isNameValid, errorText: 'namefielderror'.i18n());
   }
 
   Widget _renderLastNameTitle() {
@@ -104,7 +104,7 @@ class _SignUpNameState extends State<SignUpName> {
   }
 
   Widget _renderErrorTextLastName() {
-    return ErorrText(
+    return ErrorText(
         isValid: _isLastNameValid, errorText: 'lastnamefielderror'.i18n());
   }
 

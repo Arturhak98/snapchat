@@ -6,6 +6,7 @@ import 'package:snapchat/components/models/country_notifier.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/back_button.dart';
 import 'package:snapchat/components/widgets/change_focus.dart';
+import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
 import 'bloc/country_code_bloc.dart';
 
 class CountryCode extends StatefulWidget {
@@ -91,6 +92,7 @@ class _CountryCodeState extends State<CountryCode> {
       onTap: () => {
         value.changeCountry(widget.countries[index]),
         Navigator.pop(context),
+        
       },
       child: Column(
         children: [
@@ -124,6 +126,12 @@ class _CountryCodeState extends State<CountryCode> {
         style: const TextStyle(fontSize: 20),
       ),
     );
+  }
+  @override
+  void dispose() {
+    widget.countries.clear();
+    SqlDatabaseRepository().getCountries('').then((value) =>widget.countries.addAll(value));
+    super.dispose();
   }
 }
 

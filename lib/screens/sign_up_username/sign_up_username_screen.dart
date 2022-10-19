@@ -90,7 +90,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
   Widget _renderErrorText() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 100),
-      child: ErorrText(
+      child: ErrorText(
           isValid: _isValid && _usernameIsBusy,
           errorText: _usernameIsBusy
               ? 'usernamefielderror'.i18n()

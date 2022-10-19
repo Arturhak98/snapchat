@@ -1,4 +1,4 @@
-part of 'signup_phone_or_email_bloc_bloc.dart';
+part of 'signup_phone_or_email_bloc.dart';
 
 abstract class SignupPhoneOrEmailEvent {}
 

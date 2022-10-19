@@ -3,7 +3,7 @@ import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
-part 'signup_phone_or_email_bloc_event.dart';
+part 'signup_phone_or_email_event.dart';
 part 'signup_phone_or_email_state.dart';
 
 class SignupPhoneOrEmailBloc
@@ -35,7 +35,7 @@ class SignupPhoneOrEmailBloc
         countries: countries,
         selectedCountry: await api.selectUserCountry( countries)));}
         catch(e){
-          emit(ShowErrorAlertState(erorrMsg: e.toString()));
+          emit(ShowErrorAlertState(errorMsg: e.toString()));
         }
   }
 }

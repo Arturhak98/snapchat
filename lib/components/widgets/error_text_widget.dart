@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-class ErorrText extends StatelessWidget {
-  const ErorrText({required this.isValid, required this.errorText, super.key});
+class ErrorText extends StatelessWidget {
+  const ErrorText({required this.isValid, required this.errorText, super.key});
 final bool isValid;
 final String errorText;
   @override

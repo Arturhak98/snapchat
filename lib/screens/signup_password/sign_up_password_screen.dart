@@ -104,7 +104,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   Widget _renderErrorText() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 100),
-      child: ErorrText(isValid: _isValid, errorText: 'passfilederror'.i18n()),
+      child: ErrorText(isValid: _isValid, errorText: 'passfilederror'.i18n()),
     );
   }
 

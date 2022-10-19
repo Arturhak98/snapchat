@@ -12,7 +12,7 @@ import 'package:snapchat/components/widgets/change_focus.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/next_button_screen.dart';
 import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
-import '../signup_phone_or_email/sign_up_phone_or_email.dart';
+import '../signup_phone_or_email/sign_up_phone_or_email_screen.dart';
 import 'bloc/sign_up_birtday_bloc.dart';
 
 class SignUpBirtDay extends StatefulWidget {
@@ -112,7 +112,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 170),
       child:
-          ErorrText(errorText: 'birthdayfielderror'.i18n(), isValid: _isValid),
+          ErrorText(errorText: 'birthdayfielderror'.i18n(), isValid: _isValid),
     );
   }
 
@@ -147,9 +147,13 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     widget.user.dateOfBirthday = _selectedDate;
     Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => ChangeNotifierProvider(create:(context) =>  CountryNotifier(),child:SignUpPhoneOrEmail(
-                user: widget.user,
-              ))),
+        builder: (context) => ChangeNotifierProvider(
+          create: (context) => CountryNotifier(),
+          child: SignUpPhoneOrEmail(
+            user: widget.user,
+          ),
+        ),
+      ),
     );
   }
 }

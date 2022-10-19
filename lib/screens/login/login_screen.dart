@@ -83,7 +83,7 @@ class _LogInState extends State<LogInScreen> {
   }
 
   Widget _renderUsernameErrorText() {
-    return ErorrText(
+    return ErrorText(
         isValid: _isUsernameValid, errorText: 'loginfielderror'.i18n());
   }
 
@@ -124,7 +124,7 @@ class _LogInState extends State<LogInScreen> {
   }
 
   Widget _renderPassErrorText() {
-    return ErorrText(
+    return ErrorText(
         isValid: _isPassValid, errorText: 'loginfieldpasserror'.i18n());
   }
 

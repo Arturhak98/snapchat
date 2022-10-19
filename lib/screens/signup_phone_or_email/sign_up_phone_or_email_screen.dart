@@ -15,7 +15,7 @@ import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 
 import '../country_code/country_code_screen.dart';
 import '../sign_up_username/sign_up_username_screen.dart';
-import 'bloc/signup_phone_or_email_bloc_bloc.dart';
+import 'bloc/signup_phone_or_email_bloc.dart';
 
 class SignUpPhoneOrEmail extends StatefulWidget {
   const SignUpPhoneOrEmail({
@@ -71,7 +71,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
         _renderPhoneButton(),
         _renderPhoneFieldTitle(),
         _renderNumberField(),
-        _renderErrorNumberTextWidget(),
+        _renderErrorNumberText(),
         _renderPhoneText(),
       ],
     );
@@ -166,8 +166,8 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
             : Text('loading'.i18n(), style: const TextStyle(fontSize: 20)));
   }
 
-  Widget _renderErrorNumberTextWidget() {
-    return ErorrText(
+  Widget _renderErrorNumberText() {
+    return ErrorText(
         isValid: _validNumber, errorText: 'phonefielderror'.i18n());
   }
 
@@ -226,7 +226,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 100),
       child:
-          ErorrText(isValid: _validEmail, errorText: 'emailfieladerror'.i18n()),
+          ErrorText(isValid: _validEmail, errorText: 'emailfieladerror'.i18n()),
     );
   }
 
@@ -284,7 +284,7 @@ extension _BlocListener on _SignUpPhoneOrEmailState {
   void _signUpPhoneOrEmailListner(
       BuildContext context, SignupPhoneOrEmailState state) {
     if (state is ShowErrorAlertState) {
-      _showErroeMsg(state.erorrMsg);
+      _showErroeMsg(state.errorMsg);
     }
     if (state is UpdateEmailValid) {
       _validEmail = state.emailISValid;
