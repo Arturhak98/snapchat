@@ -4,7 +4,7 @@ import 'package:snapchat/screens/signup_name/sign_up_name_screen.dart';
 import '../login/login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
- const HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,18 +16,11 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-             
               _renderImage(),
-              _renderButtonWidget(
-                  const Color.fromRGBO(239, 62, 90, 1),
-                  'login'.i18n(),
-                  context,
-                const  LogInScreen()),
-              _renderButtonWidget(
-                  const Color.fromRGBO(36, 175, 252, 1),
-                  'signup'.i18n(),
-                  context,
-                const  SignUpName()),
+              _renderButtonWidget(const Color.fromRGBO(239, 62, 90, 1),
+                  'login'.i18n(), context, const LogInScreen()),
+              _renderButtonWidget(const Color.fromRGBO(36, 175, 252, 1),
+                  'signup'.i18n(), context, const SignUpName()),
             ],
           ),
         ),

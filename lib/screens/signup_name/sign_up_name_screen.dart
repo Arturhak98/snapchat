@@ -16,7 +16,8 @@ class SignUpName extends StatefulWidget {
 }
 
 class _SignUpNameState extends State<SignUpName> {
-  final SignUpNameBloc _bloc = SignUpNameBloc(validation: ValidationRepository());
+  final SignUpNameBloc _bloc =
+      SignUpNameBloc(validation: ValidationRepository());
   bool _isNameValid = false;
   bool _isLastNameValid = false;
   final _lastNameController = TextEditingController();

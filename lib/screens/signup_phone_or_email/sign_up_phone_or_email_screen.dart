@@ -7,6 +7,7 @@ import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/components/models/country_notifier.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
+import 'package:snapchat/components/widgets/error_alert.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
 import 'package:snapchat/middle_wares/repositories/api_repository.dart';
@@ -38,7 +39,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   var _countries = <Country>[];
   final SignupPhoneOrEmailBloc _bloc = SignupPhoneOrEmailBloc(
     validation: ValidationRepository(),
-    api: ApiRepository(),
+    apirepository: ApiRepository(),
     sqlrepository: SqlDatabaseRepository(),
   );
 
@@ -83,6 +84,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
         isvalid: _validEmail,
         onPressNextButton: _onPressEmailNextButton,
         children: [
+          // const ErrorAlert(ErrorMsg: 'dsfgsdf'),
           _renderEmailTitle(),
           _renderEmailButton(),
           _renderEmailFieldTitle(),
@@ -139,7 +141,9 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   }
 
   Widget _renderFieldButton() {
-    final value = Provider.of<CountryNotifier>(context,);
+    final value = Provider.of<CountryNotifier>(
+      context,
+    );
     return TextButton(
         onPressed: _countriesLoaded
             ? () {
@@ -230,7 +234,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
     );
   }
 
-  Future<void> _showErroeMsg(String ErrorMsg) async {
+/*   Future<void> _showErroeMsg(String ErrorMsg) async {
     return showDialog<void>(
       barrierDismissible: false,
       context: context,
@@ -250,41 +254,50 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
         );
       },
     );
-  }
+  } */
 
   void _onPressPhoneNextButton() {
-    widget.user.emailOrPhoneNumber =
-        Provider.of<CountryNotifier>(context, listen: false)
-                .country
-                .CountryCode +
-            _phoneController.text;
-    Navigator.of(context).push(
+    _bloc.add(PhoneNextButtonEvent(phone: _phoneController.text));
+    widget.user.phone = Provider.of<CountryNotifier>(context, listen: false)
+            .country
+            .CountryCode +
+        _phoneController.text;
+        widget.user.email ='';
+    /*  Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SignUpUserName(
           user: widget.user,
         ),
       ),
-    );
+    ); */
   }
 
   void _onPressEmailNextButton() {
-    widget.user.emailOrPhoneNumber = _emailContrroler.text;
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => SignUpUserName(
-          user: widget.user,
-        ),
-      ),
-    );
+    _bloc.add(EmailNextButtonEvent(email: _emailContrroler.text));
+    widget.user.email = _emailContrroler.text;
+    widget.user.phone='';
   }
 }
 
 extension _BlocListener on _SignUpPhoneOrEmailState {
   void _signUpPhoneOrEmailListner(
       BuildContext context, SignupPhoneOrEmailState state) {
+    if (state is UpdateUserState) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => SignUpUserName(
+            user: widget.user,
+          ),
+        ),
+      );
+    }
     if (state is ShowErrorAlertState) {
-      _showErroeMsg(state.errorMsg);
+      showDialog(
+        context: context,
+        builder: (context) => ErrorAlert(
+          ErrorMsg: state.errorMsg,
+        ),
+      );
     }
     if (state is UpdateEmailValid) {
       _validEmail = state.emailISValid;

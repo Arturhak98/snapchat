@@ -10,4 +10,5 @@ class UpdateUsernameValid extends SignUpUsernameState {
 }
 
 class UpdateUserState extends SignUpUsernameState {}
-class UsernameIsBusy extends SignUpUsernameState{}
+
+class UsernameIsBusy extends SignUpUsernameState {}

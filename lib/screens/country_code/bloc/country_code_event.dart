@@ -6,4 +6,3 @@ class SearchFieldEvent extends CountryCodeEvent {
   String query;
   SearchFieldEvent({required this.query});
 }
- 

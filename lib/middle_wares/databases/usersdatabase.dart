@@ -20,10 +20,11 @@ class UsersDataBase {
   }
 
   Future<void> onCreate(Database db, int version) async {
-    await db.execute(
-        'CREATE TABLE usersdb' 
-        '(userName STRING PRIMARY KEY NOT NULL,' 
-        'name STRING,lastName STRING, emailOrPhoneNumber STRING,'
-        'password STRING,dateOfBirthday STRING)');
+    await db.execute('CREATE TABLE usersdb'
+        '(name STRING PRIMARY KEY NOT NULL,'
+        'firstName STRING,lastName STRING, email STRING, phone STRING,'
+        'password STRING,birthDate STRING)');
   }
 }
+
+ 

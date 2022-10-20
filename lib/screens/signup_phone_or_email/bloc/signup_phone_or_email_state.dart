@@ -9,7 +9,7 @@ class UpdateEmailValid extends SignupPhoneOrEmailState {
   UpdateEmailValid({required this.emailISValid});
 }
 
-class ShowErrorAlertState extends SignupPhoneOrEmailState{
+class ShowErrorAlertState extends SignupPhoneOrEmailState {
   String errorMsg;
   ShowErrorAlertState({required this.errorMsg});
 }
@@ -19,11 +19,10 @@ class UpdatePhoneValid extends SignupPhoneOrEmailState {
   UpdatePhoneValid({required this.numberIsValid});
 }
 
-class SetCountriesState extends SignupPhoneOrEmailState{
-    List<Country> countries;
-   Country selectedCountry;
-   SetCountriesState({required this.countries, required this.selectedCountry});
+class SetCountriesState extends SignupPhoneOrEmailState {
+  List<Country> countries;
+  Country selectedCountry;
+  SetCountriesState({required this.countries, required this.selectedCountry});
 }
 
-
-
+class UpdateUserState extends SignupPhoneOrEmailState {}

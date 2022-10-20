@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
+import 'package:snapchat/components/widgets/error_alert.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
-import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
+import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 import '../signup_password/sign_up_password_screen.dart';
 import 'bloc/sign_up_username_bloc.dart';
@@ -20,9 +21,10 @@ class SignUpUserName extends StatefulWidget {
 
 class _SignUpUserNameState extends State<SignUpUserName> {
   bool _isValid = false;
-  bool _usernameIsBusy = true;
+
   final _usernameController = TextEditingController();
-  late final SignUpUsernameBloc _bloc = SignUpUsernameBloc(validation: ValidationRepository(),sqldb: SqlDatabaseRepository());
+  late final SignUpUsernameBloc _bloc = SignUpUsernameBloc(
+      validation: ValidationRepository(), apiRepository: ApiRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -89,13 +91,9 @@ class _SignUpUserNameState extends State<SignUpUserName> {
 
   Widget _renderErrorText() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 100),
-      child: ErrorText(
-          isValid: _isValid && _usernameIsBusy,
-          errorText: _usernameIsBusy
-              ? 'usernamefielderror'.i18n()
-              : 'usernamebusytext'.i18n()),
-    );
+        padding: const EdgeInsets.only(bottom: 100),
+        child: ErrorText(
+            isValid: _isValid, errorText: 'usernamefielderror'.i18n()));
   }
 
   Future<void> _onPressNextButton() async {
@@ -116,11 +114,15 @@ extension _SignUpUsernameListenr on _SignUpUserNameState {
       );
     }
     if (state is UpdateUsernameValid) {
-      _usernameIsBusy = true;
       _isValid = state.isUsernameValid;
     }
     if (state is UsernameIsBusy) {
-      _usernameIsBusy = false;
+      showDialog(
+        context: context,
+        builder: (context) => ErrorAlert(
+          ErrorMsg: 'usernamebusytext'.i18n(),
+        ),
+      );
     }
   }
 }

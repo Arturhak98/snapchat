@@ -5,14 +5,14 @@ import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
-import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
+import 'package:snapchat/middle_wares/repositories/api_repository.dart';
+//import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 
 import 'bloc/sign_up_pass_word_bloc.dart';
 
 class SignUpPassword extends StatefulWidget {
-  const SignUpPassword(
-      { required this.user, super.key});
+  const SignUpPassword({required this.user, super.key});
   final User user;
   @override
   State<SignUpPassword> createState() => _SignUpPasswordState();
@@ -22,7 +22,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   final _passController = TextEditingController();
   bool _isValid = false;
   bool _hidePass = false;
-  final SignUpPassWordBloc _bloc = SignUpPassWordBloc(validation: ValidationRepository());
+  final SignUpPassWordBloc _bloc =
+      SignUpPassWordBloc(validation: ValidationRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +110,12 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   }
 
   void _onPressPhoneNextButton() {
-    final sqldb=SqlDatabaseRepository();
+   // final sqldb = SqlDatabaseRepository();
+    final apirepo = ApiRepository();
+
     widget.user.password = _passController.text;
-    sqldb.insert(widget.user);
+    apirepo.addUser(widget.user);
+  //   sqldb.insert(widget.user);
     Navigator.popUntil(context, (route) => !Navigator.canPop(context));
   }
 }

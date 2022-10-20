@@ -19,7 +19,7 @@ class _UserScreenState extends State<UserScreen> {
         child: Text(
           'Name:${user.name}\nLastName:${user.lastName}' 
           '\nDateOfBirth:${user.dateOfBirthday}\nUserName:${user.userName}'
-          '\nPhoneOrEmail:${user.emailOrPhoneNumber}\nPassword:${user.password}\n',
+          '\nEmail:${user.email}\nPhone:${user.phone}\nPassword:${user.password}\n',
           style: const TextStyle(fontSize: 20),
         ),
       ),

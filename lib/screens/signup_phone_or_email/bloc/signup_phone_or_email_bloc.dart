@@ -8,14 +8,36 @@ part 'signup_phone_or_email_state.dart';
 
 class SignupPhoneOrEmailBloc
     extends Bloc<SignupPhoneOrEmailEvent, SignupPhoneOrEmailState> {
- final ValidationRepository validation;
- final SqlDatabaseRepository sqlrepository ;
- final ApiRepository api;
-  SignupPhoneOrEmailBloc({required this.validation,required this.api,required this.sqlrepository})
+  final ValidationRepository validation;
+  final SqlDatabaseRepository sqlrepository;
+  final ApiRepository apirepository;
+  SignupPhoneOrEmailBloc(
+      {required this.validation,
+      required this.sqlrepository,
+      required this.apirepository})
       : super(SignupPhoneOrEmailBlocInitial()) {
+    on<PhoneNextButtonEvent>(_onPhoneNextButtonEvent);
+    on<EmailNextButtonEvent>(_onEmailNextButtonEvent);
     on<SignUpPhoneLoadEvent>(_onSignUpPhoneLoadEvent);
     on<NumberFieldEvent>(_onNumberFieldEvent);
     on<EmailFieldEvent>(_onEmailFieldEvent);
+  }
+   Future<void> _onEmailNextButtonEvent(EmailNextButtonEvent event,Emitter emit) async{
+     final check = await apirepository.checkEmail(event.email);
+    if (check) {
+      emit(UpdateUserState());
+    } else {
+      emit(ShowErrorAlertState(errorMsg: 'Email is Busy'));
+    }
+  }
+
+  Future<void> _onPhoneNextButtonEvent(PhoneNextButtonEvent event,Emitter emit) async{
+     final check = await apirepository.checkPhone(event.phone);
+    if (check) {
+      emit(UpdateUserState());
+    } else {
+      emit(ShowErrorAlertState(errorMsg: 'Phone Number is Busy'));
+    }
   }
 
   void _onNumberFieldEvent(NumberFieldEvent event, Emitter emit) {
@@ -29,13 +51,15 @@ class SignupPhoneOrEmailBloc
 
   Future<void> _onSignUpPhoneLoadEvent(
       SignUpPhoneLoadEvent event, Emitter emit) async {
-        try{
-    final countries = await sqlrepository.getCountries('',);
-    emit(SetCountriesState(
-        countries: countries,
-        selectedCountry: await api.selectUserCountry( countries)));}
-        catch(e){
-          emit(ShowErrorAlertState(errorMsg: e.toString()));
-        }
+    try {
+      final countries = await sqlrepository.getCountries(
+        '',
+      );
+      emit(SetCountriesState(
+          countries: countries,
+          selectedCountry: await apirepository.selectUserCountry(countries)));
+    } catch (e) {
+      emit(ShowErrorAlertState(errorMsg: e.toString()));
+    }
   }
 }

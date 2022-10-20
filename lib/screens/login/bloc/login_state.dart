@@ -8,12 +8,15 @@ class UpdateNameValid extends LoginState {
   final bool isUserNameValid;
   UpdateNameValid({required this.isUserNameValid});
 }
+
 class UpdatePassValid extends LoginState {
   final bool IsPassValid;
   UpdatePassValid({required this.IsPassValid});
 }
-class UserNameAndPassValidState extends LoginState{
+
+class UserNameAndPassValidState extends LoginState {
   final User loginUser;
-UserNameAndPassValidState({required this.loginUser});
+  UserNameAndPassValidState({required this.loginUser});
 }
-class UserNameOrPassIsNotValid extends LoginState{}
+
+class UserNameOrPassIsNotValid extends LoginState {}

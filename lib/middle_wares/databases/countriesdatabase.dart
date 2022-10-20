@@ -22,9 +22,10 @@ class CountriesDataBase {
     final countries = await countriesdb!.query('countriesdb');
     if (countries.isEmpty) {
       final countries = await ApiRepository().loadJsonData();
-        countries.forEach((country) { countriesdb!.insert('countriesdb', country.toMap());});
+      countries.forEach((country) {
+        countriesdb!.insert('countriesdb', country.toMap());
+      });
     }
-    
   }
 
   Future<void> onCreate(Database db, int version) async {

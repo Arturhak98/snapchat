@@ -10,7 +10,7 @@ class NextButton extends StatelessWidget {
   final String buttonText;
   final Function() OnButtonTup;
   final bool isValid;
-  
+
   @override
   Widget build(BuildContext context) {
     return Padding(

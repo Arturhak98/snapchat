@@ -92,7 +92,6 @@ class _CountryCodeState extends State<CountryCode> {
       onTap: () => {
         value.changeCountry(widget.countries[index]),
         Navigator.pop(context),
-        
       },
       child: Column(
         children: [
@@ -127,10 +126,13 @@ class _CountryCodeState extends State<CountryCode> {
       ),
     );
   }
+
   @override
   void dispose() {
     widget.countries.clear();
-    SqlDatabaseRepository().getCountries('').then((value) =>widget.countries.addAll(value));
+    SqlDatabaseRepository()
+        .getCountries('')
+        .then((value) => widget.countries.addAll(value));
     super.dispose();
   }
 }

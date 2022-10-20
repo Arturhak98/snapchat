@@ -1,5 +1,4 @@
 class ValidationRepository {
-  
   bool isPassValid(String pass) {
     if (pass.length >= 8) {
       return true;

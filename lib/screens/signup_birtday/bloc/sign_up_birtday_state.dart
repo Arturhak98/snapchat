@@ -6,7 +6,7 @@ class SignUpBirtdayInitial extends SignUpBirtdayState {}
 
 class UpdateBirtdayValid extends SignUpBirtdayState {
   final bool birtdayValid;
-  UpdateBirtdayValid({required this.birtdayValid, });
+  UpdateBirtdayValid({
+    required this.birtdayValid,
+  });
 }
-
-

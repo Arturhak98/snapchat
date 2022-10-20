@@ -5,8 +5,7 @@ abstract class LoginEvent {}
 class NextButtonEvent extends LoginEvent {
   String password;
   String userName;
-  NextButtonEvent(
-      {required this.password, required this.userName});
+  NextButtonEvent({required this.password, required this.userName});
 }
 
 class NameFieldEvent extends LoginEvent {
@@ -18,7 +17,3 @@ class PassFieldEvent extends LoginEvent {
   String pass;
   PassFieldEvent({required this.pass});
 }
-
-
-
-
