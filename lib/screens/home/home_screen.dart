@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
 import 'package:snapchat/screens/signup_name/sign_up_name_screen.dart';
+import 'package:snapchat/screens/user/user_screen.dart';
+//import '../../middle_wares/repositories/api_repository.dart';
 import '../login/login_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    _checkLoginUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,5 +79,14 @@ class HomeScreen extends StatelessWidget {
   void _pressOnButton(Widget nextScreen, BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => nextScreen));
+  }
+
+  Future<void> _checkLoginUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('token') != null) {
+      final user = await SqlDatabaseRepository().getUser();
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => UserScreen(user: user)));
+    }
   }
 }

@@ -11,8 +11,9 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final ValidationRepository validation;
   final SqlDatabaseRepository sqldb;
-
-  LoginBloc({required this.validation, required this.sqldb})
+  final ApiRepository apirepo;
+  LoginBloc(
+      {required this.validation, required this.sqldb, required this.apirepo})
       : super(LoginInitial()) {
     on<NameFieldEvent>(_onNameFieldEvent);
     on<PassFieldEvent>(_onPassFieldEvent);
@@ -20,16 +21,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit) async {
-    final apirepo= ApiRepository();
-    final user= await apirepo.login(event.userName, event.password);
-  //  final apirepo= ApiRepository();
-   // final user= await apirepo.login(event.userName, event.password);
-   // final b=await apirepo.checkConnection();
-   // apirepo.validate(event.userName, event.password);
-   // final user = await sqldb.getUser(event.userName, event.password);
+    // final apirepo = ApiRepository();
+    //  apirepo.getMe();
+    //final user= await apirepo.login(event.userName, event.password);
+    //  final apirepo= ApiRepository();
+    // final b=await apirepo.checkConnection();
+    // apirepo.validate(event.userName, event.password);
+    // final user = await sqldb.getUser(event.userName, event.password);
+    final user = await apirepo.login(event.userName, event.password);
     if (user == null) {
       emit(UserNameOrPassIsNotValid());
     } else {
+      sqldb.insert(user);
       emit(UserNameAndPassValidState(loginUser: user));
     }
   }

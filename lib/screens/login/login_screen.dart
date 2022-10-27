@@ -4,6 +4,7 @@ import 'package:localization/localization.dart';
 import 'package:snapchat/components/style/style.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
+import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 
@@ -24,7 +25,7 @@ class _LogInState extends State<LogInScreen> {
   final _userNameController = TextEditingController();
   final _passController = TextEditingController();
   final _bloc = LoginBloc(
-      validation: ValidationRepository(), sqldb: SqlDatabaseRepository());
+      validation: ValidationRepository(), sqldb: SqlDatabaseRepository(),apirepo: ApiRepository());
 
   @override
   Widget build(BuildContext context) {

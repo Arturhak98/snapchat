@@ -7,13 +7,13 @@ class User {
   String userName;
   String password;
   User({
-    this.name='',
-    this.lastName='',
+    this.name = '',
+    this.lastName = '',
     this.dateOfBirthday,
-    this.email='',
-    this.userName='',
-    this.password='',
-    this.phone='',
+    this.email = '',
+    this.userName = '',
+    this.password = '',
+    this.phone = '',
   });
 
   Map<String, dynamic> toMap() {
@@ -22,23 +22,22 @@ class User {
       'lastName': lastName,
       'birthDate': dateOfBirthday.toString(),
       'email': email,
-      'phone':phone,
+      'phone': phone,
       'name': userName,
       'password': password,
     };
     return map;
   }
 
-
   factory User.fromMap(Map<String, dynamic> user) {
     return User(
-      name: user['firstName'] as String,
-      lastName: user['lastName'] as String,
+      name: user['firstName'].toString(),
+      lastName: user['lastName'].toString(),
       dateOfBirthday: DateTime.parse(user['birthDate']),
-      email: user['email']as String,
+      email: user['email'].toString(),
       phone: user['phone'].toString(),
-      userName: user['name'] as String,
-      password: user['password'] as String,
+      userName: user['name'].toString(),
+      password: user['password'].toString(),
     );
   }
 }

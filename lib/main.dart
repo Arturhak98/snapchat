@@ -4,6 +4,7 @@ import 'package:localization/localization.dart';
 import 'screens/home/home_screen.dart';
 
 void main() {
+
   LocalJsonLocalization.delegate.directories = ['lib/i18n'];
   runApp(MaterialApp(supportedLocales: [
     const Locale('en', ''),
