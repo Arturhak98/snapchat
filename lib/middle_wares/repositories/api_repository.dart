@@ -74,8 +74,9 @@ class ApiRepository {
     return false;
   }
 
-  Future<bool> editUser(User user) async {
+  Future<String?> editUser(User user) async {
     final response;
+    String? error;
     try {
       final prefs = await SharedPreferences.getInstance();
       response = await http.post(
@@ -94,16 +95,17 @@ class ApiRepository {
           'birthDate': user.dateOfBirthday.toString(),
         }),
       );
+      error= jsonDecode(response.body)['error'];
       if (response.statusCode == 200 &&
           jsonDecode(response.body)['error'] == null) {
-        return true;
+        return null;
         //  final user = User.fromMap(jsonDecode(response.body)['user']);
         //  await SqlDatabaseRepository().editUser(user);
       }
     } catch (_) {
-      throw ('ERROR');
+      throw ('error');
     }
-    return false;
+    return error;
   }
 
   Future<User?> login(String username, String password) async {

@@ -141,9 +141,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   }
 
   Widget _renderFieldButton() {
-    final value = Provider.of<CountryNotifier>(
-      context,
-    );
+    final value = Provider.of<CountryNotifier>(context);
     return TextButton(
         onPressed: _countriesLoaded
             ? () {
@@ -262,7 +260,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
             .country
             .CountryCode +
         _phoneController.text;
-        widget.user.email ='';
+    widget.user.email = '';
     /*  Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SignUpUserName(
@@ -275,7 +273,7 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
   void _onPressEmailNextButton() {
     _bloc.add(EmailNextButtonEvent(email: _emailContrroler.text));
     widget.user.email = _emailContrroler.text;
-    widget.user.phone='';
+    widget.user.phone = '';
   }
 }
 

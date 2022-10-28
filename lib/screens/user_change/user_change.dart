@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:localization/localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
@@ -170,6 +169,7 @@ class _UserChangeState extends State<UserChange> {
   }
 
   Widget _renderDatePicker() {
+     FocusManager.instance.primaryFocus?.unfocus();
     return Container(
       height: 320,
       color: Colors.white,
@@ -182,7 +182,7 @@ class _UserChangeState extends State<UserChange> {
                 initialDateTime: widget.user.dateOfBirthday,
                 onDateTimeChanged: (value) {
                   _bloc.add(BirthDayChangeEvent(birthDay: value));
-                  _birthDateController.text = DateFormat.yMMMMd().format(value);
+                  _birthDateController.text =value.toString();// DateFormat.yMMMMd().format(value);
                 }),
           ),
           TextButton(
