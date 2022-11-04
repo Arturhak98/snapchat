@@ -21,22 +21,31 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Future<void> _onDeleteEvent(DeleteEvent event, Emitter emit) async {
-    final deleted = await apiRepository.deleteUser();
-    if (deleted) {
-      sqlDatabaseRepository.deleteUser();
+    try {
+      await apiRepository.deleteUser();
+      await sqlDatabaseRepository.deleteUser();
       emit(DeleteState());
-    } else {
-      emit(ShowErrorAler(error: 'ERROR'));
+    } catch (e) {
+      if (e.toString().startsWith('404')) {
+        emit(DeleteState());
+        await sqlDatabaseRepository.deleteUser();
+      }
+      emit(ShowErrorAler(error: e.toString()));
     }
   }
 
   Future<void> _onUserScreenLoadEvent(
       UserScreenLoadEvent event, Emitter emit) async {
+    final sqlUser = await sqlDatabaseRepository.getUser();
+    emit(SqlUserState(user: sqlUser));
     try {
       final user = await apiRepository.upDateUser();
       if (user != null) {
-        sqlDatabaseRepository.editUser(user);
+        await sqlDatabaseRepository.editUser(user);
         emit(ScreenLoadedState(user: user));
+      } else {
+        sqlDatabaseRepository.Logout();
+        emit(LogOutState());
       }
     } catch (e) {
       emit(ShowErrorAler(error: e.toString()));

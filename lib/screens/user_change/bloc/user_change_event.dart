@@ -40,3 +40,4 @@ class PassFieldEvent extends UserChangeEvent{
   String pass;
   PassFieldEvent({required this.pass});
 }
+class LoadEvent extends UserChangeEvent{}

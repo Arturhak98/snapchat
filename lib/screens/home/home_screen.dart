@@ -13,11 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    // _checkLoginUser();
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               _renderImage(),
               _renderButtonWidget(const Color.fromRGBO(239, 62, 90, 1),
-                  'login'.i18n(), context, const LogInScreen()),
+                  'login'.tr(),  const LogInScreen()),
               _renderButtonWidget(const Color.fromRGBO(36, 175, 252, 1),
-                  'signup'.i18n(), context, const SignUpName()),
+                  'signup'.tr(),  const SignUpName()),
             ],
           ),
         ),
@@ -44,17 +40,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _renderImage() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 170),
-      child: Image.asset('images/snapchat.webp'),
+      child: Image.asset('assets/images/snapchat.webp'),
     );
   }
 
-  Widget _renderButtonWidget(Color buttonColor, String buttonText,
-      BuildContext context, Widget nextScreen) {
+  Widget _renderButtonWidget(Color buttonColor, String buttonText, Widget nextScreen) {
     return Row(
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () => _pressOnButton(nextScreen, context),
+            onPressed: () => _pressOnButton(nextScreen),
             style: ButtonStyle(
               shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
               backgroundColor: MaterialStatePropertyAll(buttonColor),
@@ -75,17 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _pressOnButton(Widget nextScreen, BuildContext context) {
+  void _pressOnButton(Widget nextScreen) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => nextScreen));
   }
 
-  /*  Future<void> _checkLoginUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('token') != null) {
-      final user = await SqlDatabaseRepository().getUser();
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => UserScreen(user: user)));
-    }
-  } */
 }

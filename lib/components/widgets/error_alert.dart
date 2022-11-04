@@ -4,7 +4,6 @@ class ErrorAlert extends StatefulWidget {
   const ErrorAlert(
       {required this.ErrorMsg, /* required this.buttonPressed */ super.key});
   final String ErrorMsg;
-//  final void Function() buttonPressed;
   @override
   State<ErrorAlert> createState() => _ErrorAlertState();
 }
@@ -19,9 +18,6 @@ class _ErrorAlertState extends State<ErrorAlert> {
         TextButton(
           child: const Text('Ok'),
           onPressed: () =>  Navigator.of(context).pop(),
-          /*    onPressed:=>buttonPressed(),/*  () {
-                 
-                }, */ */
         ),
       ],
     );

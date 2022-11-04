@@ -11,7 +11,7 @@ class CountryCodeBloc extends Bloc<CountryCodeEvent, CountryCodeState> {
 
   Future<void> _onSearchFieldEvent(SearchFieldEvent event, Emitter emit) async {
     final sqlRepository = SqlDatabaseRepository();
-    final filtredCountres = await sqlRepository.getCountries(event.query);
+    final filtredCountres = await sqlRepository.getCountries(query:event.query);
     emit(SearchCountriesState(filtredCountries: filtredCountres));
   }
 }

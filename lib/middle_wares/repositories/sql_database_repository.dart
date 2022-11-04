@@ -1,13 +1,14 @@
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/components/models/user.dart';
-import 'package:snapchat/middle_wares/databases/countriesdatabase.dart';
-import 'package:snapchat/middle_wares/databases/usersdatabase.dart';
+import 'package:snapchat/middle_wares/databases/countries_database.dart';
+import 'package:snapchat/middle_wares/databases/users_database.dart';
+import 'package:snapchat/middle_wares/repositories/token_repository.dart';
 
 class SqlDatabaseRepository {
   final userdb = UsersDataBase();
   final countriesdb = CountriesDataBase();
-  Future<void> deleteUser()async{
+  Future<void> deleteUser() async {
     await userdb.init();
     await userdb.usersdb!.delete('usersdb');
   }
@@ -29,13 +30,19 @@ class SqlDatabaseRepository {
   }
 
   Future<void> Logout() async {
-    final prefs = await SharedPreferences.getInstance();
     await userdb.init();
-    prefs.remove('token');
+    TokenRepository().removeToken('token');
     userdb.usersdb!.delete('usersdb');
   }
 
-  Future<List<Country>> getCountries(String query) async {
+  Future<void> setCountries(List<Country> countries) async {
+    await countriesdb.init();
+    countries.forEach((country) {
+      countriesdb.countriesdb!.insert('countriesdb', country.toMap());
+    });
+  }
+
+  Future<List<Country>> getCountries({String query = ''}) async {
     await countriesdb.init();
     final countriesMap = await countriesdb.countriesdb!.rawQuery(
       'SELECT * FROM countriesdb'

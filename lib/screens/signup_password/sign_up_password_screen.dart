@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
+import 'package:snapchat/components/widgets/error_alert.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
+import 'package:snapchat/components/widgets/main_screen.dart';
 import 'package:snapchat/components/widgets/screen_widget.dart';
 import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
 import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
-import 'package:snapchat/screens/user/user_screen.dart';
 
 import 'bloc/sign_up_pass_word_bloc.dart';
 
@@ -33,22 +34,23 @@ class _SignUpPasswordState extends State<SignUpPassword> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<SignUpPassWordBloc, SignUpPassWordState>(
-        listener: _signUpPasswordListner,
-        builder: (context, state) {
-          return ScreenSample(
-            buttonText: 'nextbutton'.i18n(),
-            isvalid: _isValid,
-            onPressNextButton: _onPressPhoneNextButton,
-            children: [
-              _renderTitle(),
-              _renderSecondTitle(),
-              _renderFieldTitle(),
-              _renderPassField(),
-              _renderErrorText(),
-            ],
-          );
-        },
-      ),
+          listener: _signUpPasswordListner,
+          builder: (context, state) => _render()),
+    );
+  }
+
+  Widget _render() {
+    return ScreenSample(
+      buttonText: 'nextbutton'.tr(),
+      isvalid: _isValid,
+      onPressNextButton: _onPressPhoneNextButton,
+      children: [
+        _renderTitle(),
+        _renderSecondTitle(),
+        _renderFieldTitle(),
+        _renderPassField(),
+        _renderErrorText(),
+      ],
     );
   }
 
@@ -57,7 +59,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
       padding: const EdgeInsets.only(top: 160),
       child: Center(
         child: Text(
-          'passtitle'.i18n(),
+          'passtitle'.tr(),
           style: TitleStyle,
         ),
       ),
@@ -67,7 +69,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   Widget _renderSecondTitle() {
     return Center(
       child: Text(
-        'passsecondtitle'.i18n(),
+        'passsecondtitle'.tr(),
         style: const TextStyle(
             color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
       ),
@@ -78,7 +80,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'passfieldtitle'.i18n(),
+        'passfieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -98,7 +100,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
     return _passController.text.isEmpty
         ? Container()
         : TextButton(
-            child: Text('hide'.i18n()),
+            child: Text('hide'.tr()),
             onPressed: () => setState(() {
               _hidePass = !_hidePass;
             }),
@@ -108,28 +110,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   Widget _renderErrorText() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 100),
-      child: ErrorText(isValid: _isValid, errorText: 'passfilederror'.i18n()),
-    );
-  }
-
-  Future<void> _showErroeMsg(String ErrorMsg) async {
-    return showDialog<void>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(' $ErrorMsg'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      child: ErrorText(isValid: _isValid, errorText: 'passfilederror'.tr()),
     );
   }
 
@@ -142,18 +123,19 @@ class _SignUpPasswordState extends State<SignUpPassword> {
 extension _SignUpPasswordListner on _SignUpPasswordState {
   void _signUpPasswordListner(BuildContext context, SignUpPassWordState state) {
     if (state is ErrorAlertState) {
-      _showErroeMsg('ERROR');
+      showDialog(
+        context: context,
+        builder: (context) => ErrorAlert(
+          ErrorMsg: state.error,
+        ),
+      );
     }
     if (state is UpdatePassValid) {
       _isValid = state.isPassValid;
     }
     if (state is UserAddedState) {
-      Navigator.popUntil(context, (route) => !Navigator.canPop(context));
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => UserScreen(user: widget.user),
-        ),
-      );
+     context.findAncestorStateOfType<FirstScreenState>()?.reloadApp();
+   
     }
   }
 }

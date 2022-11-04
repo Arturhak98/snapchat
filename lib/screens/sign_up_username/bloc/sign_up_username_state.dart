@@ -8,7 +8,7 @@ class UpdateUsernameValid extends SignUpUsernameState {
   final bool isUsernameValid;
   UpdateUsernameValid({required this.isUsernameValid});
 }
-
-class UpdateUserState extends SignUpUsernameState {}
-
-class UsernameIsBusy extends SignUpUsernameState {}
+class AlertError extends SignUpUsernameState {
+  String error;
+  AlertError({required this.error});
+}

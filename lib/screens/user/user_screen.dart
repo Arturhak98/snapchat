@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snapchat/components/models/user.dart';
+import 'package:snapchat/components/widgets/error_alert.dart';
+import 'package:snapchat/components/widgets/main_screen.dart';
 import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
-import 'package:snapchat/screens/home/home_screen.dart';
 import 'package:snapchat/screens/user/bloc/user_bloc.dart';
-//import 'package:snapchat/middle_wares/repositories/api_repository.dart';
-//import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
 import 'package:snapchat/screens/user_change/user_change.dart';
 
 class UserScreen extends StatefulWidget {
-  const UserScreen({required this.user, super.key});
-  final User user;
+  const UserScreen();
   @override
-  State<UserScreen> createState() => _UserScreenState(user: user);
+  State<UserScreen> createState() => _UserScreenState();
 }
 
 class _UserScreenState extends State<UserScreen> {
-  _UserScreenState({required this.user});
-  User user;
+  _UserScreenState();
+  User user = User();
   final _bloc = UserBloc(
       apiRepository: ApiRepository(),
       sqlDatabaseRepository: SqlDatabaseRepository());
   @override
   void initState() {
     _bloc.add(UserScreenLoadEvent());
-    // ApiRepository().upDateUser().then((value) => updateUser(value));
     super.initState();
   }
 
@@ -34,26 +31,27 @@ class _UserScreenState extends State<UserScreen> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<UserBloc, UserState>(
-        listener: (context, state) => _userStateListner(context, state),
-        builder: (context, state) {
-          return WillPopScope(
-            onWillPop: () async {
-              return false;
-            },
-            child: Scaffold(
-              body: Center(
-                child: Column(
-                  children: [
-                    _renderUserInfo(),
-                    _renderLogOutButton(),
-                    _renderDeleteButton(),
-                    _renderEditButton(),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
+          listener: (context, state) => _userStateListner(context, state),
+          builder: (context, state) => _render()),
+    );
+  }
+
+  Widget _render() {
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              _renderUserInfo(),
+              _renderLogOutButton(),
+              _renderDeleteButton(),
+              _renderEditButton(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -98,34 +96,12 @@ class _UserScreenState extends State<UserScreen> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => UserChange(
-              user: user,
               updateUser: updateUser,
             ),
           ),
         );
       },
       child: const Text('edit account'),
-    );
-  }
-
-  Future<void> _alertDialod(String alertTitle, String alertMsg) async {
-    return showDialog<void>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(alertTitle),
-          content: Text(alertMsg),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -142,32 +118,25 @@ class _UserScreenState extends State<UserScreen> {
 
 extension _BlocListener on _UserScreenState {
   void _userStateListner(BuildContext context, UserState state) {
+    if (state is SqlUserState) {
+      user = state.user;
+    }
     if (state is ShowErrorAler) {
-      _alertDialod('ERROR', state.error);
+      showDialog(
+        context: context,
+        builder: (context) => ErrorAlert(
+          ErrorMsg: state.error,
+        ),
+      );
     }
     if (state is ScreenLoadedState) {
       updateUser(state.user);
     }
     if (state is DeleteState) {
-      // _alertDialod('Delete', 'Deleted');
-      /*     Navigator.pushAndRemoveUntil<void>(
-   
-  ); */
-      //  Navigator.of(context).pop();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-          (route) => false);
+      context.findAncestorStateOfType<FirstScreenState>()?.reloadApp();
     }
     if (state is LogOutState) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-          (route) => false);
+      context.findAncestorStateOfType<FirstScreenState>()?.reloadApp();
     }
   }
 }

@@ -21,7 +21,7 @@ class SignUpUserName extends StatefulWidget {
 
 class _SignUpUserNameState extends State<SignUpUserName> {
   bool _isValid = false;
-
+  bool _isBusy = false;
   final _usernameController = TextEditingController();
   late final SignUpUsernameBloc _bloc = SignUpUsernameBloc(
       validation: ValidationRepository(), apiRepository: ApiRepository());
@@ -31,20 +31,23 @@ class _SignUpUserNameState extends State<SignUpUserName> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<SignUpUsernameBloc, SignUpUsernameState>(
-        listener: _signUpUsernameListenr,
-        builder: (context, state) => ScreenSample(
-            buttonText: 'nextbutton'.i18n(),
-            isvalid: _isValid,
-            onPressNextButton: _onPressNextButton,
-            children: [
-              _renderTitle(),
-              _renderSecondTitle(),
-              _renderFieldTitle(),
-              _renderUsernameField(),
-              _renderErrorText(),
-            ]),
-      ),
+          listener: _signUpUsernameListenr,
+          builder: (context, state) => _render()),
     );
+  }
+
+  Widget _render() {
+    return ScreenSample(
+        buttonText: 'nextbutton'.tr(),
+        isvalid: _isValid && !_isBusy,
+        onPressNextButton: _onPressNextButton,
+        children: [
+          _renderTitle(),
+          _renderSecondTitle(),
+          _renderFieldTitle(),
+          _renderUsernameField(),
+          _renderErrorText(),
+        ]);
   }
 
   Widget _renderTitle() {
@@ -52,7 +55,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
         padding: const EdgeInsets.only(top: 160),
         child: Center(
           child: Text(
-            'usarnmaetitle'.i18n(),
+            'usarnmaetitle'.tr(),
             style: TitleStyle,
           ),
         ));
@@ -61,7 +64,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
   Widget _renderSecondTitle() {
     return Center(
       child: Text(
-        'usarnamesecondtitle'.i18n(),
+        'usarnamesecondtitle'.tr(),
         style: const TextStyle(
           color: Colors.grey,
           fontWeight: FontWeight.bold,
@@ -75,7 +78,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'usernamefieldtitle'.i18n(),
+        'usernamefieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -84,7 +87,10 @@ class _SignUpUserNameState extends State<SignUpUserName> {
   Widget _renderUsernameField() {
     return TextField(
       controller: _usernameController,
-      onChanged: (value) => _bloc.add(UsernameFieldEvent(username: value)),
+      onChanged: (value) {
+        _bloc.add(UsernameFieldEvent(username: value));
+        _isBusy = false;
+      },
       autofocus: true,
     );
   }
@@ -92,37 +98,35 @@ class _SignUpUserNameState extends State<SignUpUserName> {
   Widget _renderErrorText() {
     return Padding(
         padding: const EdgeInsets.only(bottom: 100),
-        child: ErrorText(
-            isValid: _isValid, errorText: 'usernamefielderror'.i18n()));
+        child:
+            ErrorText(isValid: _isValid, errorText: 'usernamefielderror'.tr()));
   }
 
-  Future<void> _onPressNextButton() async {
-    _bloc.add(NextButtonEvent(userName: _usernameController.text));
+  void _onPressNextButton() {
+    widget.user.userName = _usernameController.text;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SignUpPassword(
+          user: widget.user,
+        ),
+      ),
+    );
   }
 }
 
 extension _SignUpUsernameListenr on _SignUpUserNameState {
   void _signUpUsernameListenr(BuildContext context, SignUpUsernameState state) {
-    if (state is UpdateUserState) {
-      widget.user.userName = _usernameController.text;
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => SignUpPassword(
-            user: widget.user,
-          ),
-        ),
-      );
-    }
     if (state is UpdateUsernameValid) {
       _isValid = state.isUsernameValid;
     }
-    if (state is UsernameIsBusy) {
+    if (state is AlertError) {
       showDialog(
         context: context,
         builder: (context) => ErrorAlert(
-          ErrorMsg: 'usernamebusytext'.i18n(),
+          ErrorMsg: state.error,
         ),
       );
+      _isBusy = true;
     }
   }
 }

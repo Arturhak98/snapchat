@@ -19,4 +19,7 @@ class UserNameAndPassValidState extends LoginState {
   UserNameAndPassValidState({required this.loginUser});
 }
 
-class UserNameOrPassIsNotValid extends LoginState {}
+class AlertError extends LoginState {
+  String error;
+  AlertError({required this.error});
+}

@@ -1,7 +1,7 @@
 class User {
   String name;
   String lastName;
-  DateTime? dateOfBirthday;
+  DateTime dateOfBirthday;
   String email;
   String phone;
   String userName;
@@ -9,12 +9,12 @@ class User {
   User({
     this.name = '',
     this.lastName = '',
-    this.dateOfBirthday,
+    DateTime? dateOfBirthday,
     this.email = '',
     this.userName = '',
     this.password = '',
     this.phone = '',
-  });
+  }):dateOfBirthday=dateOfBirthday ?? DateTime.now();
 
   Map<String, dynamic> toMap() {
     final map = {

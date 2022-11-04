@@ -16,6 +16,6 @@ final SearchFieldBorderStyle = InputDecoration(
     borderSide: const BorderSide(width: 1, color: Colors.grey),
   ),
   prefixIcon: const Icon(Icons.search),
-  labelText: 'search'.i18n(),
+  labelText: 'search'.tr(),
   labelStyle: const TextStyle(fontSize: 15),
 );

@@ -5,20 +5,21 @@ abstract class SignupPhoneOrEmailEvent {}
 class SignUpPhoneLoadEvent extends SignupPhoneOrEmailEvent {}
 
 class NumberFieldEvent extends SignupPhoneOrEmailEvent {
+  String countryCode;
   String phoneNumber;
-  NumberFieldEvent({required this.phoneNumber});
+  NumberFieldEvent({required this.phoneNumber,required this.countryCode});
 }
 
 class EmailFieldEvent extends SignupPhoneOrEmailEvent {
   String email;
   EmailFieldEvent({required this.email});
 }
-class EmailNextButtonEvent extends SignupPhoneOrEmailEvent{
+/* class EmailNextButtonEvent extends SignupPhoneOrEmailEvent{
   String email;
-  EmailNextButtonEvent({required this.email});
-}
-class PhoneNextButtonEvent extends SignupPhoneOrEmailEvent{
+  EmailNextButtonEvent({required this.email}); */
+
+/* class PhoneNextButtonEvent extends SignupPhoneOrEmailEvent{
   String phone;
   PhoneNextButtonEvent({required this.phone});
-}
+} */
 

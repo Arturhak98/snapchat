@@ -21,19 +21,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _onNextButtonEvent(NextButtonEvent event, Emitter emit) async {
-    // final apirepo = ApiRepository();
-    //  apirepo.getMe();
-    //final user= await apirepo.login(event.userName, event.password);
-    //  final apirepo= ApiRepository();
-    // final b=await apirepo.checkConnection();
-    // apirepo.validate(event.userName, event.password);
-    // final user = await sqldb.getUser(event.userName, event.password);
-    final user = await apirepo.login(event.userName, event.password);
-    if (user == null) {
-      emit(UserNameOrPassIsNotValid());
-    } else {
-      sqldb.insert(user);
+    try {
+      final user = await apirepo.login(event.userName, event.password);
+      await sqldb.insert(user);
       emit(UserNameAndPassValidState(loginUser: user));
+    } catch (e) {
+      emit(AlertError(error: e.toString()));
     }
   }
 

@@ -1,39 +1,36 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snapchat/components/models/countries.dart';
 import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/components/models/user.dart';
-
+import 'package:snapchat/middle_wares/repositories/token_repository.dart';
 
 class ApiRepository {
+  final _baseUrl = 'http://34.226.192.109:3000';
+  final TokenRepository _tokenRepository = TokenRepository();
   Future<User?> upDateUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final response = await http.get(Uri.parse('http://34.226.192.109:3000/me'),
+    final token = await _tokenRepository.getToken('token');
+    final response = await http.get(Uri.parse('$_baseUrl/me'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'token': prefs.getString('token').toString(),
+          'token': token.toString(),
         });
-    if (response.statusCode == 200 &&
-        jsonDecode(response.body)['user'] != null) {
-      return User.fromMap(jsonDecode(response.body)['user']);
-      /*    SqlDatabaseRepository()
-            .editUser(User.fromMap(jsonDecode(response.body)['user']));
-        return User.fromMap(jsonDecode(response.body)['user']);
+    if (response.statusCode == 200) {
+      final user = await jsonDecode(response.body)['user'];
+      if (user == null) {
+        return null;
       } else {
-        SqlDatabaseRepository().Logout();
-        */
-
+        return User.fromMap(user);
+      }
+    } else {
+      final error = await jsonDecode(response.body)['error'];
+      throw '${response.statusCode} $error';
     }
-    prefs.remove('token');
-    return null;
   }
 
-  Future<bool> addUser(User user) async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> addUser(User user) async {
     final response = await http.post(
-      Uri.parse('http://34.226.192.109:3000/addUser'),
+      Uri.parse('$_baseUrl/addUser'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -48,70 +45,56 @@ class ApiRepository {
       }),
     );
     if (response.statusCode == 200) {
-      prefs.setString(
-          'token', await jsonDecode(response.body)['createdTokenForUser']);
-          return true;
-     // SqlDatabaseRepository().insert(user);
+      _tokenRepository.setToken(
+          'token', jsonDecode(response.body)['createdTokenForUser']);
+    } else {
+      final error = await jsonDecode(response.body)['error'];
+      throw '${response.statusCode} $error';
     }
-    return false;
   }
 
-  Future<bool> deleteUser() async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> deleteUser() async {
+    final token = await _tokenRepository.getToken('token');
     final response = await http.delete(
-        Uri.parse('http://34.226.192.109:3000/delete/user'),
-        headers: <String, String>{
-          'token': prefs.getString('token').toString()
-        });
-    if (response.statusCode == 200 &&
-        jsonDecode(response.body)['error'] == null) {
-      prefs.remove('token');
-      return true;
-
-      //  SqlDatabaseRepository().deleteUser();
+        Uri.parse('$_baseUrl/delete/user'),
+        headers: <String, String>{'token': token.toString()});
+    if (response.statusCode == 200) {
+      _tokenRepository.removeToken('token');
+    } else {
+      final error = await jsonDecode(response.body)['error'];
+      throw '${response.statusCode} $error';
     }
-    prefs.remove('token');
-    return false;
+    _tokenRepository.removeToken('token');
   }
 
-  Future<String?> editUser(User user) async {
+  Future<void> editUser(User? user) async {
     final response;
-    String? error;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      response = await http.post(
-        Uri.parse('http://34.226.192.109:3000/editAccount'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'token': prefs.getString('token').toString(),
-        },
-        body: jsonEncode(<String, String>{
-          'lastName': user.lastName,
-          'firstName': user.name,
-          'password': user.password,
-          'email': user.email,
-          'phone': user.phone,
-          'name': user.userName,
-          'birthDate': user.dateOfBirthday.toString(),
-        }),
-      );
-      error= jsonDecode(response.body)['error'];
-      if (response.statusCode == 200 &&
-          jsonDecode(response.body)['error'] == null) {
-        return null;
-        //  final user = User.fromMap(jsonDecode(response.body)['user']);
-        //  await SqlDatabaseRepository().editUser(user);
-      }
-    } catch (_) {
-      throw ('error');
+    final token = await _tokenRepository.getToken('token');
+    response = await http.post(
+      Uri.parse('$_baseUrl/editAccount'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'token': token.toString(),
+      },
+      body: jsonEncode(<String, String>{
+        'lastName': user!.lastName,
+        'firstName': user.name,
+        'password': user.password,
+        'email': user.email,
+        'phone': user.phone,
+        'name': user.userName,
+        'birthDate': user.dateOfBirthday.toString(),
+      }),
+    );
+    final error = await jsonDecode(response.body)['error'];
+    if (response.statusCode != 200) {
+      throw '${response.statusCode} $error';
     }
-    return error;
   }
 
-  Future<User?> login(String username, String password) async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<User> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://34.226.192.109:3000/signIn'),
+      Uri.parse('$_baseUrl/signIn'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -124,28 +107,18 @@ class ApiRepository {
     );
     if (response.statusCode == 200) {
       final jsonUser = jsonDecode(response.body);
-      if (jsonUser['error'] == null) {
-        await prefs.setString('token', jsonUser['createdTokenForUser']);
-        final user = User.fromMap(jsonUser['user']);
-       // await SqlDatabaseRepository().insert(user);
-        return user;
-      }
+      await _tokenRepository.setToken('token', jsonUser['createdTokenForUser']);
+      final user = User.fromMap(jsonUser['user']);
+      return user;
+    } else {
+      final error = await jsonDecode(response.body)['error'];
+      throw '${response.statusCode} $error';
     }
-    return null;
   }
 
-  Future<bool> checkConnection() async {
-    final response =
-        await http.get(Uri.parse('http://34.226.192.109:3000/checkConnection'));
-    if (jsonDecode(response.body)['error'] == null) {
-      return false;
-    }
-    return true;
-  }
-
-  Future<bool> checkEmail(String email) async {
+  Future<void> checkEmail(String email) async {
     final response = await http.post(
-      Uri.parse('http://34.226.192.109:3000/check/email'),
+      Uri.parse('$_baseUrl/check/email'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -155,15 +128,15 @@ class ApiRepository {
         }),
       ),
     );
-    if (jsonDecode(response.body)['error'] == null) {
-      return true;
+    if (response.statusCode != 200) {
+      final error = await jsonDecode(response.body)['error'];
+      throw '${response.statusCode} $error';
     }
-    return false;
   }
 
-  Future<bool> checkUserName(String username) async {
+  Future<void> checkUserName(String username) async {
     final response = await http.post(
-      Uri.parse('http://34.226.192.109:3000/check/name'),
+      Uri.parse('$_baseUrl/check/name'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -173,15 +146,15 @@ class ApiRepository {
         }),
       ),
     );
-    if (jsonDecode(response.body)['error'] == null) {
-      return true;
+    if (response.statusCode != 200) {
+      final error = await jsonDecode(response.body)['error'];
+      throw '${response.statusCode} $error';
     }
-    return false;
   }
 
-  Future<bool> checkPhone(String phone) async {
+  Future<void> checkPhone(String phone) async {
     final response = await http.post(
-      Uri.parse('http://34.226.192.109:3000/check/phone'),
+      Uri.parse('$_baseUrl/check/phone'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -191,41 +164,32 @@ class ApiRepository {
         }),
       ),
     );
-    if (jsonDecode(response.body)['error'] == null) {
-      return true;
+    if (response.statusCode != 200) {
+      final error = await jsonDecode(response.body)['error'];
+      throw '${response.statusCode} $error';
     }
-    return false;
   }
 
   Future<Country> selectUserCountry(List<Country> countries) async {
-    try {
-      final locale = await http.get(Uri.parse('http://ip-api.com/json'));
-      if (locale.statusCode == 200) {
-        final currentCountry =
-            json.decode(locale.body)['countryCode'].toString();
-        return countries.firstWhere((dynamic country) =>
-            country.CountryCodeString.contains(currentCountry));
-      } else {
-        throw 'Erorr ${locale.statusCode}';
-      }
-    } on SocketException catch (_) {
-      throw 'No internet';
+    final locale = await http.get(Uri.parse('http://ip-api.com/json'));
+    if (locale.statusCode == 200) {
+      final currentCountry = json.decode(locale.body)['countryCode'].toString();
+      return countries.firstWhere((dynamic country) =>
+          country.CountryCodeString.contains(currentCountry));
+    } else {
+      throw 'Erorr ${locale.statusCode}';
     }
   }
 
   Future<List<Country>> loadJsonData() async {
-    try {
-      final jsonText = await http
-          .get(Uri.parse('https://parentstree-server.herokuapp.com/countries'));
-      if (jsonText.statusCode == 200) {
-        final data = json.decode(jsonText.body) as Map<String, dynamic>;
-        final countries = Countries.fromJson(data);
-        return countries.countries;
-      } else {
-        throw 'Erorr ${jsonText.statusCode}';
-      }
-    } catch (_) {
-      throw 'No internet';
+    final jsonText = await http
+        .get(Uri.parse('https://parentstree-server.herokuapp.com/countries'));
+    if (jsonText.statusCode == 200) {
+      final data = json.decode(jsonText.body) as Map<String, dynamic>;
+      final countries = Countries.fromJson(data);
+      return countries.countries;
+    } else {
+      throw 'Erorr ${jsonText.statusCode}';
     }
   }
 }

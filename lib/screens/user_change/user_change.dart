@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snapchat/components/models/user.dart';
 import 'package:snapchat/components/style/style.dart';
+import 'package:snapchat/components/widgets/error_alert.dart';
 import 'package:snapchat/components/widgets/error_text_widget.dart';
 import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
@@ -12,22 +13,22 @@ import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 import 'package:snapchat/screens/user_change/bloc/user_change_bloc.dart';
 
 class UserChange extends StatefulWidget {
-  final User user;
-  final Function(User user) updateUser;
-  const UserChange({required this.user, required this.updateUser, super.key});
-
+ // final User user;
+  final Function(User user)? updateUser;
+  const UserChange({required this.updateUser, super.key});
   @override
   State<UserChange> createState() => _UserChangeState();
 }
 
 class _UserChangeState extends State<UserChange> {
-  late TextEditingController _firstNameController;
-  late TextEditingController _lastNameController;
-  late TextEditingController _birthDateController;
-  late TextEditingController _emailController;
-  late TextEditingController _phoneController;
-  late TextEditingController _userNameController;
-  late TextEditingController _passController;
+  User user=User();
+  final  _firstNameController=TextEditingController();
+  final _lastNameController=TextEditingController();
+  final _birthDateController=TextEditingController();
+  final _emailController=TextEditingController();
+  final _phoneController=TextEditingController();
+  final _userNameController=TextEditingController();
+  final _passController=TextEditingController();
   bool _isFirstNameValid = true;
   bool _isLastNameValid = true;
   bool _isBirthDayValid = true;
@@ -42,14 +43,7 @@ class _UserChangeState extends State<UserChange> {
 
   @override
   void initState() {
-    _firstNameController = TextEditingController(text: widget.user.name);
-    _lastNameController = TextEditingController(text: widget.user.lastName);
-    _birthDateController =
-        TextEditingController(text: widget.user.dateOfBirthday.toString());
-    _emailController = TextEditingController(text: widget.user.email);
-    _phoneController = TextEditingController(text: widget.user.phone);
-    _userNameController = TextEditingController(text: widget.user.userName);
-    _passController = TextEditingController(text: widget.user.password);
+    _bloc.add(LoadEvent());
     super.initState();
   }
 
@@ -59,44 +53,46 @@ class _UserChangeState extends State<UserChange> {
       create: (context) => _bloc,
       child: BlocConsumer<UserChangeBloc, UserChangeState>(
         listener: (context, state) => _userChangeListner(context, state),
-        builder: (context, state) {
-          return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.only(top: 80, left: 30, right: 30),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _renderFirstNameFieldTitle(),
-                      _renderFirstNameField(),
-                      _renderFirstNameError(),
-                      _renderLastNameFieldTitle(),
-                      _renderLastNameField(),
-                      _renderLastNameError(),
-                      _renderBirthDateFieldTitle(),
-                      _renderBirthDateField(),
-                      _renderBirthDateError(),
-                      _renderEmailFieldTitle(),
-                      _renderEmailField(),
-                      _renderEmailError(),
-                      _renderPhoneFieldTitle(),
-                      _renderPhoneField(),
-                      _renderPhoneError(),
-                      _renderUserNameFieldTitle(),
-                      _renderUserNameField(),
-                      _renderUserNameError(),
-                      _renderPassFieldTitle(),
-                      _renderPassField(),
-                      _renderPassError(),
-                      _renderEditButton()
-                    ],
-                  ),
-                ),
-              ),
+        builder: (context, state) => _render(),
+      ),
+    );
+  }
+
+  Widget _render() {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.only(top: 80, left: 30, right: 30),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _renderFirstNameFieldTitle(),
+                _renderFirstNameField(),
+                _renderFirstNameError(),
+                _renderLastNameFieldTitle(),
+                _renderLastNameField(),
+                _renderLastNameError(),
+                _renderBirthDateFieldTitle(),
+                _renderBirthDateField(),
+                _renderBirthDateError(),
+                _renderEmailFieldTitle(),
+                _renderEmailField(),
+                _renderEmailError(),
+                _renderPhoneFieldTitle(),
+                _renderPhoneField(),
+                _renderPhoneError(),
+                _renderUserNameFieldTitle(),
+                _renderUserNameField(),
+                _renderUserNameError(),
+                _renderPassFieldTitle(),
+                _renderPassField(),
+                _renderPassError(),
+                _renderEditButton()
+              ],
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
@@ -105,7 +101,7 @@ class _UserChangeState extends State<UserChange> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'namefieldtitle'.i18n(),
+        'namefieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -120,14 +116,14 @@ class _UserChangeState extends State<UserChange> {
 
   Widget _renderFirstNameError() {
     return ErrorText(
-        isValid: _isFirstNameValid, errorText: 'namefielderror'.i18n());
+        isValid: _isFirstNameValid, errorText: 'namefielderror'.tr());
   }
 
   Widget _renderLastNameFieldTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'lastnamefieldtitle'.i18n(),
+        'lastnamefieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -142,14 +138,14 @@ class _UserChangeState extends State<UserChange> {
 
   Widget _renderLastNameError() {
     return ErrorText(
-        isValid: _isLastNameValid, errorText: 'lastnamefielderror'.i18n());
+        isValid: _isLastNameValid, errorText: 'lastnamefielderror'.tr());
   }
 
   Widget _renderBirthDateFieldTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'birthdayfieldtitle'.i18n(),
+        'birthdayfieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -169,7 +165,7 @@ class _UserChangeState extends State<UserChange> {
   }
 
   Widget _renderDatePicker() {
-     FocusManager.instance.primaryFocus?.unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
     return Container(
       height: 320,
       color: Colors.white,
@@ -179,10 +175,11 @@ class _UserChangeState extends State<UserChange> {
             height: 250,
             child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
-                initialDateTime: widget.user.dateOfBirthday,
+                initialDateTime: user.dateOfBirthday,
                 onDateTimeChanged: (value) {
                   _bloc.add(BirthDayChangeEvent(birthDay: value));
-                  _birthDateController.text =value.toString();// DateFormat.yMMMMd().format(value);
+                  _birthDateController.text =
+                      value.toString(); // DateFormat.yMMMMd().format(value);
                 }),
           ),
           TextButton(
@@ -196,14 +193,14 @@ class _UserChangeState extends State<UserChange> {
 
   Widget _renderBirthDateError() {
     return ErrorText(
-        isValid: _isBirthDayValid, errorText: 'birthdayfielderror'.i18n());
+        isValid: _isBirthDayValid, errorText: 'birthdayfielderror'.tr());
   }
 
   Widget _renderEmailFieldTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'emailfieldtitle'.i18n(),
+        'emailfieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -218,14 +215,14 @@ class _UserChangeState extends State<UserChange> {
 
   Widget _renderEmailError() {
     return ErrorText(
-        isValid: _isEmailValid, errorText: 'emailfieladerror'.i18n());
+        isValid: _isEmailValid, errorText: 'emailfieladerror'.tr());
   }
 
   Widget _renderPhoneFieldTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'phonefieldtitle'.i18n(),
+        'phonefieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -242,14 +239,14 @@ class _UserChangeState extends State<UserChange> {
 
   Widget _renderPhoneError() {
     return ErrorText(
-        isValid: _isPhoneValid, errorText: 'phonefielderror'.i18n());
+        isValid: _isPhoneValid, errorText: 'phonefielderror'.tr());
   }
 
   Widget _renderUserNameFieldTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'usernamefieldtitle'.i18n(),
+        'usernamefieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -264,14 +261,14 @@ class _UserChangeState extends State<UserChange> {
 
   Widget _renderUserNameError() {
     return ErrorText(
-        isValid: _isUserNameValid, errorText: 'usernamefielderror'.i18n());
+        isValid: _isUserNameValid, errorText: 'usernamefielderror'.tr());
   }
 
   Widget _renderPassFieldTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'passfieldtitle'.i18n(),
+        'passfieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -285,56 +282,55 @@ class _UserChangeState extends State<UserChange> {
   }
 
   Widget _renderPassError() {
-    return ErrorText(isValid: _isPassValid, errorText: 'passfilederror'.i18n());
+    return ErrorText(isValid: _isPassValid, errorText: 'passfilederror'.tr());
   }
 
   Widget _renderEditButton() {
-    widget.user
-        ..name = _firstNameController.text
-        ..lastName = _lastNameController.text
-        ..dateOfBirthday = DateTime.parse(_birthDateController.text)
-        ..email = _emailController.text
-        ..phone = _phoneController.text
-        ..userName = _userNameController.text
-        ..password = _passController.text;
+    /* user
+      ..name = _firstNameController.text
+      ..lastName = _lastNameController.text
+      ..dateOfBirthday = DateTime.parse(_birthDateController.text)
+      ..email = _emailController.text
+      ..phone = _phoneController.text
+      ..userName = _userNameController.text
+      ..password = _passController.text; */
     return ElevatedButton(
-      onPressed: () => _isFirstNameValid &&
+      onPressed: _isFirstNameValid &&
               _isLastNameValid &&
               _isBirthDayValid &&
               _isEmailValid &&
               _isPhoneValid &&
               _isUserNameValid &&
               _isPassValid
-          ? _bloc.add(EditButtonEvent(user: widget.user))
+          ?() {_bloc.add(EditButtonEvent(user: user));
+          user
+      ..name = _firstNameController.text
+      ..lastName = _lastNameController.text
+      ..dateOfBirthday = DateTime.parse(_birthDateController.text)
+      ..email = _emailController.text
+      ..phone = _phoneController.text
+      ..userName = _userNameController.text
+      ..password = _passController.text;
+          }
           : null,
       child: const Text('EDIT'),
     );
   }
 
-  Future<void> _showErroeMsg(String ErrorMsg) async {
-    return showDialog<void>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(' $ErrorMsg'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 extension _BlocListener on _UserChangeState {
   void _userChangeListner(BuildContext context, UserChangeState state) {
+    if(state is UserLoadedState){
+   _firstNameController.text=state.user.name;
+   _lastNameController.text=state.user.lastName;
+   _birthDateController.text=state.user.dateOfBirthday.toString();
+   _emailController.text=state.user.email;
+   _phoneController.text=state.user.phone;
+   _userNameController.text=state.user.userName;
+   _passController.text=state.user.password;
+      user=state.user;
+    }
     if (state is FirstNameValidState) {
       _isFirstNameValid = state.firstNameIsValid;
     }
@@ -360,24 +356,16 @@ extension _BlocListener on _UserChangeState {
       _isPassValid = state.passIsValid;
     }
     if (state is UserUpdateState) {
-      widget.updateUser(widget.user);
+      widget.updateUser?.call(user);
       Navigator.of(context).pop();
     }
     if (state is ErrorAlertState) {
-      _showErroeMsg(state.error);
+         showDialog(
+        context: context,
+        builder: (context) => ErrorAlert(
+          ErrorMsg: state.error,
+        ),
+      );
     }
   }
 }
-/* {
-        widget.user
-          ..name = _firstNameController.text
-          ..lastName = _lastNameController.text
-          ..dateOfBirthday = DateTime.parse(_birthDateController.text)
-          ..email = _emailController.text
-          ..phone = _phoneController.text
-          ..userName = _userNameController.text
-          ..password = _passController.text;
-        ApiRepository().editUser(widget.user);
-        widget.updateUser(widget.user);
-        Navigator.of(context).pop();
-      }, */

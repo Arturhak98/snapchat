@@ -24,16 +24,22 @@ class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
     on<UserNameFieldEvent>(_onUserNameFieldEvent);
     on<PassFieldEvent>(_onPassFieldEvent);
     on<EditButtonEvent>(_onEditButtonEvent);
+    on<LoadEvent>(_onLoadEvent);
   }
+  Future<void> _onLoadEvent(LoadEvent event, Emitter emit) async {
+    final user = await sqlDatabaseRepository.getUser();
+    emit(UserLoadedState(user: user));
+  }
+
   Future<void> _onEditButtonEvent(EditButtonEvent event, Emitter emit) async {
     try {
-      final userIsUpDated = await apiRepository.editUser(event.user);
-      if (userIsUpDated==null) {
+      await apiRepository.editUser(event.user);
+      /*  if (userIsUpDated == null) {
         emit(UserUpdateState());
         await sqlDatabaseRepository.editUser(event.user);
       } else {
         emit(ErrorAlertState(error: userIsUpDated));
-      }
+      } */
     } catch (e) {
       emit(ErrorAlertState(error: e.toString()));
     }

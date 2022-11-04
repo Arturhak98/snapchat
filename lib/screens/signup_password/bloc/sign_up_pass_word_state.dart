@@ -9,4 +9,7 @@ class UpdatePassValid extends SignUpPassWordState {
   
 }
 class UserAddedState extends SignUpPassWordState{}
-class ErrorAlertState extends SignUpPassWordState{}
+class ErrorAlertState extends SignUpPassWordState{
+  String error;
+  ErrorAlertState({required this.error});
+}

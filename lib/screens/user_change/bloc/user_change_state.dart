@@ -46,3 +46,7 @@ class PassValidState extends UserChangeState {
   bool passIsValid;
   PassValidState({required this.passIsValid});
 }
+class UserLoadedState extends UserChangeState{
+  User user;
+  UserLoadedState({required this.user});
+}

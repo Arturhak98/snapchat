@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:snapchat/components/models/country_code.dart';
 import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:snapchat/middle_wares/repositories/sql_database_repository.dart';
@@ -16,45 +17,49 @@ class SignupPhoneOrEmailBloc
       required this.sqlrepository,
       required this.apirepository})
       : super(SignupPhoneOrEmailBlocInitial()) {
-    on<PhoneNextButtonEvent>(_onPhoneNextButtonEvent);
-    on<EmailNextButtonEvent>(_onEmailNextButtonEvent);
-    on<SignUpPhoneLoadEvent>(_onSignUpPhoneLoadEvent);
-    on<NumberFieldEvent>(_onNumberFieldEvent);
+    on<SignUpPhoneLoadEvent>(_onSignUpPhoneLoadEvent,
+        transformer: ((events, mapper) => events
+            .debounceTime(const Duration(milliseconds: 100))
+            .switchMap((mapper))));
+    on<NumberFieldEvent>(_onNumberFieldEvent,
+        transformer: ((events, mapper) => events
+            .debounceTime(const Duration(milliseconds: 100))
+            .switchMap((mapper))));
     on<EmailFieldEvent>(_onEmailFieldEvent);
   }
-   Future<void> _onEmailNextButtonEvent(EmailNextButtonEvent event,Emitter emit) async{
-     final check = await apirepository.checkEmail(event.email);
-    if (check) {
-      emit(UpdateUserState());
-    } else {
-      emit(ShowErrorAlertState(errorMsg: 'Email is Busy'));
+
+  Future<void> _onNumberFieldEvent(NumberFieldEvent event, Emitter emit) async {
+    final valid = validation.isNumberValid(event.phoneNumber);
+    if (valid) {
+      try {
+        await apirepository.checkPhone(event.countryCode + event.phoneNumber);
+      } catch (e) {
+        emit(ShowErrorAlertState(errorMsg: e.toString()));
+      }
     }
+    emit(UpdatePhoneValid(numberIsValid: valid));
   }
-
-  Future<void> _onPhoneNextButtonEvent(PhoneNextButtonEvent event,Emitter emit) async{
-     final check = await apirepository.checkPhone(event.phone);
-    if (check) {
-      emit(UpdateUserState());
-    } else {
-      emit(ShowErrorAlertState(errorMsg: 'Phone Number is Busy'));
+  
+  Future<void> _onEmailFieldEvent(EmailFieldEvent event, Emitter emit) async {
+    final valid = validation.isEmailValid(event.email);
+    if (valid) {
+      try {
+        await apirepository.checkEmail(event.email);
+      } catch (e) {
+        emit(ShowErrorAlertState(errorMsg: e.toString()));
+      }
     }
-  }
-
-  void _onNumberFieldEvent(NumberFieldEvent event, Emitter emit) {
-    emit(UpdatePhoneValid(
-        numberIsValid: validation.isNumberValid(event.phoneNumber)));
-  }
-
-  void _onEmailFieldEvent(EmailFieldEvent event, Emitter emit) {
-    emit(UpdateEmailValid(emailISValid: validation.isEmailValid(event.email)));
+    emit(UpdateEmailValid(emailISValid: valid));
   }
 
   Future<void> _onSignUpPhoneLoadEvent(
       SignUpPhoneLoadEvent event, Emitter emit) async {
     try {
-      final countries = await sqlrepository.getCountries(
-        '',
-      );
+      var countries = await sqlrepository.getCountries();
+      if (countries.isEmpty) {
+        countries = await apirepository.loadJsonData();
+        await sqlrepository.setCountries(countries);
+      }
       emit(SetCountriesState(
           countries: countries,
           selectedCountry: await apirepository.selectUserCountry(countries)));

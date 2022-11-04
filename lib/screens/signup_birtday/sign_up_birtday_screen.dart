@@ -86,7 +86,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
   Widget _renderTitle() {
     return Center(
         child: Text(
-      'birthdaytitle'.i18n(),
+      'birthdaytitle'.tr(),
       style: TitleStyle,
     ));
   }
@@ -95,7 +95,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'birthdayfieldtitle'.i18n(),
+        'birthdayfieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -112,7 +112,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 170),
       child:
-          ErrorText(errorText: 'birthdayfielderror'.i18n(), isValid: _isValid),
+          ErrorText(errorText: 'birthdayfielderror'.tr(), isValid: _isValid),
     );
   }
 
@@ -121,7 +121,7 @@ class _SignUpBirtDayState extends State<SignUpBirtDay> {
       alignment: Alignment.bottomCenter,
       child: NextButton(
         OnButtonTup: _onPressNextButton,
-        buttonText: 'nextbutton'.i18n(),
+        buttonText: 'nextbutton'.tr(),
         isValid: _isValid,
       ),
     );

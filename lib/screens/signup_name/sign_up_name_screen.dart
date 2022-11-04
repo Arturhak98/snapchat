@@ -29,9 +29,14 @@ class _SignUpNameState extends State<SignUpName> {
       create: (context) => _bloc,
       child: BlocConsumer<SignUpNameBloc, SignUpNameState>(
         listener: _signupNameListener,
-        builder: (context, state) {
-          return ScreenSample(
-              buttonText: 'namebutton'.i18n(),
+        builder: (context, state) => _render()
+      ),
+    );
+  }
+
+  Widget _render() {
+              return ScreenSample(
+              buttonText: 'namebutton'.tr(),
               isvalid: _isLastNameValid && _isNameValid,
               onPressNextButton: _onPressNextButton,
               children: [
@@ -46,9 +51,6 @@ class _SignUpNameState extends State<SignUpName> {
                 _renderPrivacyPolicy(),
                 _renderServiceTerms(),
               ]);
-        },
-      ),
-    );
   }
 
   Widget _renderTitle() {
@@ -56,7 +58,7 @@ class _SignUpNameState extends State<SignUpName> {
       padding: const EdgeInsets.only(top: 50),
       child: Center(
         child: Text(
-          'nametitle'.i18n(),
+          'nametitle'.tr(),
           style: TitleStyle,
         ),
       ),
@@ -67,7 +69,7 @@ class _SignUpNameState extends State<SignUpName> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Text(
-        'namefieldtitle'.i18n(),
+        'namefieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -84,14 +86,14 @@ class _SignUpNameState extends State<SignUpName> {
   }
 
   Widget _renderErrorTextName() {
-    return ErrorText(isValid: _isNameValid, errorText: 'namefielderror'.i18n());
+    return ErrorText(isValid: _isNameValid, errorText: 'namefielderror'.tr());
   }
 
   Widget _renderLastNameTitle() {
     return Padding(
       padding: const EdgeInsets.only(top: 5),
       child: Text(
-        'lastnamefieldtitle'.i18n(),
+        'lastnamefieldtitle'.tr(),
         style: FieldTitleStyle,
       ),
     );
@@ -106,7 +108,7 @@ class _SignUpNameState extends State<SignUpName> {
 
   Widget _renderErrorTextLastName() {
     return ErrorText(
-        isValid: _isLastNameValid, errorText: 'lastnamefielderror'.i18n());
+        isValid: _isLastNameValid, errorText: 'lastnamefielderror'.tr());
   }
 
   Widget _renderInfoText() {
@@ -114,7 +116,7 @@ class _SignUpNameState extends State<SignUpName> {
       padding: const EdgeInsets.only(
         top: 5,
       ),
-      child: Text('infotext'.i18n()),
+      child: Text('infotext'.tr()),
     );
   }
 
@@ -123,9 +125,9 @@ class _SignUpNameState extends State<SignUpName> {
       padding: const EdgeInsets.only(top: 1),
       child: Row(
         children: [
-          Text('privacypolicytext'.i18n()),
+          Text('privacypolicytext'.tr()),
           _renderPrivacyPolicyButton(),
-          Text('afterprivacypolicytext'.i18n()),
+          Text('afterprivacypolicytext'.tr()),
         ],
       ),
     );
@@ -135,7 +137,7 @@ class _SignUpNameState extends State<SignUpName> {
     return GestureDetector(
       onTap: () {},
       child: Text(
-        'privacypolicybuttontext'.i18n(),
+        'privacypolicybuttontext'.tr(),
         style: const TextStyle(color: Colors.blueAccent),
       ),
     );
@@ -145,7 +147,7 @@ class _SignUpNameState extends State<SignUpName> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('servicetermstext'.i18n()),
+        Text('servicetermstext'.tr()),
         _renderServiceTermsButton(),
       ],
     );
@@ -157,7 +159,7 @@ class _SignUpNameState extends State<SignUpName> {
       child: GestureDetector(
         onTap: () {},
         child: Text(
-          'servicetermsbutton'.i18n(),
+          'servicetermsbutton'.tr(),
           style: const TextStyle(color: Colors.blueAccent),
         ),
       ),

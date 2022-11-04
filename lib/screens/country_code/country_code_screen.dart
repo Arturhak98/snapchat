@@ -28,29 +28,29 @@ class _CountryCodeState extends State<CountryCode> {
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocConsumer<CountryCodeBloc, CountryCodeState>(
-        listener: _countryBlocListner,
-        builder: (context, state) {
-          return ChangeFocus(
-            child: Scaffold(
-              body: Stack(
+          listener: _countryBlocListner,
+          builder: (context, state) => _render()),
+    );
+  }
+
+  Widget _render() {
+    return ChangeFocus(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            _renderBackButton(),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 140),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _renderBackButton(),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 140),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _renderTextField(),
-                        _renderListView(),
-                      ],
-                    ),
-                  ),
+                  _renderTextField(),
+                  _renderListView(),
                 ],
               ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
@@ -90,7 +90,7 @@ class _CountryCodeState extends State<CountryCode> {
     final value = Provider.of<CountryNotifier>(context, listen: false);
     return GestureDetector(
       onTap: () => {
-        value.changeCountry(widget.countries[index]),
+        value.changeCountry = widget.countries[index],
         Navigator.pop(context),
       },
       child: Column(
@@ -131,7 +131,7 @@ class _CountryCodeState extends State<CountryCode> {
   void dispose() {
     widget.countries.clear();
     SqlDatabaseRepository()
-        .getCountries('')
+        .getCountries()
         .then((value) => widget.countries.addAll(value));
     super.dispose();
   }
