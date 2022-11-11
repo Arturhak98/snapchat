@@ -20,7 +20,6 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInState extends State<LogInScreen> {
   final _visibilityNotifier = ValueNotifier<bool>(true);
-  // bool _visibility = true;
   bool _isPassValid = true;
   bool _isUsernameValid = true;
   final _userNameController = TextEditingController(text: '1234');
@@ -168,6 +167,8 @@ extension _BlocListener on _LogInState {
       );
     }
     if (state is UserNameAndPassValidState) {
+      context.findAncestorStateOfType<FirstScreenState>()?.navigatorKey =
+          GlobalKey<NavigatorState>();
       context.findAncestorStateOfType<FirstScreenState>()?.reloadApp();
     }
   }

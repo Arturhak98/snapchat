@@ -107,7 +107,7 @@ class ApiRepository {
     );
     if (response.statusCode == 200) {
       final jsonUser = jsonDecode(response.body);
-      await _tokenRepository.setToken('token', jsonUser['createdTokenForUser']);
+     // await _tokenRepository.setToken('token', jsonUser['createdTokenForUser']);
       final user = User.fromMap(jsonUser['user']);
       return user;
     } else {

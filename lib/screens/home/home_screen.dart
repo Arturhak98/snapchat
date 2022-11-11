@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-
 import 'package:snapchat/screens/signup_name/sign_up_name_screen.dart';
-
-//import '../../middle_wares/repositories/api_repository.dart';
 import '../login/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {

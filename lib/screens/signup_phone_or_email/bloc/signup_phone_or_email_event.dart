@@ -14,12 +14,5 @@ class EmailFieldEvent extends SignupPhoneOrEmailEvent {
   String email;
   EmailFieldEvent({required this.email});
 }
-/* class EmailNextButtonEvent extends SignupPhoneOrEmailEvent{
-  String email;
-  EmailNextButtonEvent({required this.email}); */
 
-/* class PhoneNextButtonEvent extends SignupPhoneOrEmailEvent{
-  String phone;
-  PhoneNextButtonEvent({required this.phone});
-} */
 

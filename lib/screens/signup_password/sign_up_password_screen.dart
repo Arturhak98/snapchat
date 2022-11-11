@@ -134,8 +134,9 @@ extension _SignUpPasswordListner on _SignUpPasswordState {
       _isValid = state.isPassValid;
     }
     if (state is UserAddedState) {
-     context.findAncestorStateOfType<FirstScreenState>()?.reloadApp();
-   
+      context.findAncestorStateOfType<FirstScreenState>()?.navigatorKey =
+          GlobalKey<NavigatorState>();
+      context.findAncestorStateOfType<FirstScreenState>()?.reloadApp();
     }
   }
 }

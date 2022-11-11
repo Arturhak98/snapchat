@@ -89,7 +89,9 @@ class _SignUpUserNameState extends State<SignUpUserName> {
       controller: _usernameController,
       onChanged: (value) {
         _bloc.add(UsernameFieldEvent(username: value));
-        _isBusy = false;
+        setState(() {
+          _isBusy = true;
+        });
       },
       autofocus: true,
     );
@@ -116,6 +118,9 @@ class _SignUpUserNameState extends State<SignUpUserName> {
 
 extension _SignUpUsernameListenr on _SignUpUserNameState {
   void _signUpUsernameListenr(BuildContext context, SignUpUsernameState state) {
+    if(state is UserNameIsFree){
+      _isBusy=false;
+    }
     if (state is UpdateUsernameValid) {
       _isValid = state.isUsernameValid;
     }

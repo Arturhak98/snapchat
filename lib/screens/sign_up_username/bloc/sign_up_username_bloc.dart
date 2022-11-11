@@ -22,15 +22,14 @@ class SignUpUsernameBloc
   Future<void> _onUsernameFieldEvent(
       UsernameFieldEvent event, Emitter emit) async {
     {
-       final valid = validation.isUsernameValid(event.username);
-     if (valid) {
-      try
-     {   await apiRepository.checkUserName(event.username);}
-      catch(e){
-         emit(AlertError(error: e.toString()));
-      }
-         
-    
+      final valid = validation.isUsernameValid(event.username);
+      if (valid) {
+        try {
+          await apiRepository.checkUserName(event.username);
+          emit(UserNameIsFree());
+        } catch (e) {
+          emit(AlertError(error: e.toString()));
+        }
       }
       emit(UpdateUsernameValid(isUsernameValid: valid));
     }

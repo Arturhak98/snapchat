@@ -7,11 +7,4 @@ class CountryNotifier extends ChangeNotifier {
     this.country = country;
     notifyListeners();
   }
-/*    changeCountry(Country country)set {
-    this.country.CountryCode = country.CountryCode;
-    this.country.CountryName = country.CountryName;
-    this.country.CountryCodeString = country.CountryCodeString;
-    notifyListeners(); */
-
-  /*  } */
 }

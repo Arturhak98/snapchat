@@ -71,10 +71,6 @@ class _UserScreenState extends State<UserScreen> {
   Widget _renderLogOutButton() {
     return ElevatedButton(
       onPressed: () => _bloc.add(LogOutEvent()),
-      /*  {
-        SqlDatabaseRepository().Logout();
-        Navigator.of(context).pop();
-      }, */
       child: const Text('Log Out'),
     );
   }
@@ -82,10 +78,6 @@ class _UserScreenState extends State<UserScreen> {
   Widget _renderDeleteButton() {
     return ElevatedButton(
       onPressed: () => _bloc.add(DeleteEvent()),
-      /*  {
-        ApiRepository().deleteUser();
-        Navigator.of(context).pop();
-      }, */
       child: const Text('Delete'),
     );
   }
@@ -116,6 +108,7 @@ class _UserScreenState extends State<UserScreen> {
   }
 }
 
+
 extension _BlocListener on _UserScreenState {
   void _userStateListner(BuildContext context, UserState state) {
     if (state is SqlUserState) {
@@ -129,13 +122,17 @@ extension _BlocListener on _UserScreenState {
         ),
       );
     }
-    if (state is ScreenLoadedState) {
+    if (state is ScreenLoadedState) { 
       updateUser(state.user);
     }
     if (state is DeleteState) {
+      context.findAncestorStateOfType<FirstScreenState>()?.navigatorKey =
+          GlobalKey<NavigatorState>();
       context.findAncestorStateOfType<FirstScreenState>()?.reloadApp();
     }
     if (state is LogOutState) {
+      context.findAncestorStateOfType<FirstScreenState>()?.navigatorKey =
+          GlobalKey<NavigatorState>();
       context.findAncestorStateOfType<FirstScreenState>()?.reloadApp();
     }
   }

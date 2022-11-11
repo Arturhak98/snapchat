@@ -45,19 +45,10 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
     sqlrepository: SqlDatabaseRepository(),
   );
 
-  //late CountryNotifier _countryNotifier;
-
   @override
   void initState() {
     _bloc.add(SignUpPhoneLoadEvent());
-    // _countryNotifier = Provider.of<CountryNotifier>(context, listen: false);
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // _countryNotifier = Provider.of<CountryNotifier>(context, listen: false);
   }
 
   @override
@@ -93,17 +84,17 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
 
   Widget _renderSignUpEmailScreen() {
     return ScreenSample(
-        buttonText: 'nextbutton'.tr(),
-        isvalid: _validEmail && !_emailIsBusy,
-        onPressNextButton: _onPressEmailNextButton,
-        children: [
-          // const ErrorAlert(ErrorMsg: 'dsfgsdf'),
-          _renderEmailTitle(),
-          _renderEmailButton(),
-          _renderEmailFieldTitle(),
-          _renderEmailField(),
-          _renderEmailErrorText(),
-        ]);
+      buttonText: 'nextbutton'.tr(),
+      isvalid: _validEmail && !_emailIsBusy,
+      onPressNextButton: _onPressEmailNextButton,
+      children: [
+        _renderEmailTitle(),
+        _renderEmailButton(),
+        _renderEmailFieldTitle(),
+        _renderEmailField(),
+        _renderEmailErrorText(),
+      ],
+    );
   }
 
   Widget _renderPhoneTitle() {
@@ -145,12 +136,14 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
     return TextField(
       controller: _phoneController,
       onChanged: (value) {
+        setState(() {
+          _phoneIsBusy = true;
+        });
         _bloc.add(NumberFieldEvent(
             phoneNumber: value,
             countryCode: Provider.of<CountryNotifier>(context, listen: false)
                 .country
                 .CountryCode));
-        _phoneIsBusy = false;
       },
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       autofocus: true,
@@ -241,8 +234,11 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
     return TextField(
       controller: _emailContrroler,
       onChanged: (value) {
+        setState(() {
+          _emailIsBusy=true;
+        });
         _bloc.add(EmailFieldEvent(email: value));
-        _emailIsBusy = false;
+       
       },
       autofocus: true,
     );
@@ -269,13 +265,6 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
         ),
       ),
     );
-    /*  Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => SignUpUserName(
-          user: widget.user,
-        ),
-      ),
-    ); */
   }
 
   void _onPressEmailNextButton() {
@@ -294,6 +283,12 @@ class _SignUpPhoneOrEmailState extends State<SignUpPhoneOrEmail> {
 extension _BlocListener on _SignUpPhoneOrEmailState {
   void _signUpPhoneOrEmailListner(
       BuildContext context, SignupPhoneOrEmailState state) {
+    if (state is PhoneIsFree) {
+      _phoneIsBusy = false;
+    }
+    if(state is EmailIsFree){
+      _emailIsBusy=false;
+    }
     if (state is ShowErrorAlertState) {
       showDialog(
         context: context,

@@ -12,3 +12,4 @@ class AlertError extends SignUpUsernameState {
   String error;
   AlertError({required this.error});
 }
+class UserNameIsFree extends SignUpUsernameState{}

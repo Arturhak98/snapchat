@@ -13,7 +13,6 @@ import 'package:snapchat/middle_wares/repositories/validation_repository.dart';
 import 'package:snapchat/screens/user_change/bloc/user_change_bloc.dart';
 
 class UserChange extends StatefulWidget {
- // final User user;
   final Function(User user)? updateUser;
   const UserChange({required this.updateUser, super.key});
   @override
@@ -179,7 +178,7 @@ class _UserChangeState extends State<UserChange> {
                 onDateTimeChanged: (value) {
                   _bloc.add(BirthDayChangeEvent(birthDay: value));
                   _birthDateController.text =
-                      value.toString(); // DateFormat.yMMMMd().format(value);
+                      value.toString(); 
                 }),
           ),
           TextButton(
@@ -286,14 +285,6 @@ class _UserChangeState extends State<UserChange> {
   }
 
   Widget _renderEditButton() {
-    /* user
-      ..name = _firstNameController.text
-      ..lastName = _lastNameController.text
-      ..dateOfBirthday = DateTime.parse(_birthDateController.text)
-      ..email = _emailController.text
-      ..phone = _phoneController.text
-      ..userName = _userNameController.text
-      ..password = _passController.text; */
     return ElevatedButton(
       onPressed: _isFirstNameValid &&
               _isLastNameValid &&

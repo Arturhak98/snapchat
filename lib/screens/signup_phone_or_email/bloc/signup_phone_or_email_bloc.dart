@@ -33,6 +33,7 @@ class SignupPhoneOrEmailBloc
     if (valid) {
       try {
         await apirepository.checkPhone(event.countryCode + event.phoneNumber);
+        emit(PhoneIsFree());
       } catch (e) {
         emit(ShowErrorAlertState(errorMsg: e.toString()));
       }
@@ -45,6 +46,7 @@ class SignupPhoneOrEmailBloc
     if (valid) {
       try {
         await apirepository.checkEmail(event.email);
+        emit(EmailIsFree());
       } catch (e) {
         emit(ShowErrorAlertState(errorMsg: e.toString()));
       }

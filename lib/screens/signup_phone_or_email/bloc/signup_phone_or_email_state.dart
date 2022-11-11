@@ -13,9 +13,6 @@ class ShowErrorAlertState extends SignupPhoneOrEmailState {
   String errorMsg;
   ShowErrorAlertState({required this.errorMsg});
 }
-/* class PhoneIsBusy extends SignupPhoneOrEmailState {}
-
-class EmailIsBusy extends SignupPhoneOrEmailState {} */
 
 class UpdatePhoneValid extends SignupPhoneOrEmailState {
   bool numberIsValid;
@@ -28,4 +25,5 @@ class SetCountriesState extends SignupPhoneOrEmailState {
   SetCountriesState({required this.countries, required this.selectedCountry});
 }
 
-/* class UpdateUserState extends SignupPhoneOrEmailState {} */
+class PhoneIsFree extends SignupPhoneOrEmailState {}
+class EmailIsFree extends SignupPhoneOrEmailState{}

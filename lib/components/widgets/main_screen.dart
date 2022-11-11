@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
@@ -10,12 +9,14 @@ class FirstScreen extends StatefulWidget {
   const FirstScreen({
     required this.prefs,
   });
+
   final SharedPreferences prefs;
   @override
   State<FirstScreen> createState() => FirstScreenState();
 }
 
 class FirstScreenState extends State<FirstScreen> {
+  var navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,7 +30,7 @@ class FirstScreenState extends State<FirstScreen> {
         GlobalCupertinoLocalizations.delegate,
         LocalJsonLocalization.delegate,
       ],
-      navigatorKey: GlobalKey<NavigatorState>(),
+      navigatorKey: navigatorKey,
       home: widget.prefs.getString('token') != null
           ? const UserScreen()
           : const HomeScreen(),

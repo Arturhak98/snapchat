@@ -1,4 +1,3 @@
-//import 'package:snapchat/middle_wares/repositories/api_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CountriesDataBase {
@@ -19,13 +18,6 @@ class CountriesDataBase {
           version: 1,
           onCreate: onCreate);
     } catch (_) {}
-  /*   final countries = await countriesdb!.query('countriesdb');
-    if (countries.isEmpty) {
-      final countries = await ApiRepository().loadJsonData();
-      countries.forEach((country) {
-        countriesdb!.insert('countriesdb', country.toMap());
-      }); */
-   // }
   }
 
   Future<void> onCreate(Database db, int version) async {
